@@ -1,0 +1,3 @@
+https://code.tutsplus.com/ru/tutorials/building-games-with-python-3-and-pygame-part-1--cms-30081
+Вот тут сначала пишут про game.py и gameObject.py
+Может, стоит сначала их написать?
