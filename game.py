@@ -1,6 +1,6 @@
 import pygame
 import sys
-
+from numpy import math
 # COLORS
 LIGHT_BLUE = (0, 255, 255)
 RED = (255, 0, 0)
@@ -28,7 +28,7 @@ class main_window():
         #пока просто для наполненности написал:
         pygame.draw.rect(self.window, YELLOW, (0, 0, 600, 200))
         pygame.draw.rect(self.window, LIGHT_BLUE, (0, 200, 600, 400))
-        pygame.draw.lines(self.window, WHITE, False, [[x * x //50, x] for x in range(0, 600)])
+        pygame.draw.lines(self.window, BLACK, False, [[30 * math.sin(x), 30 * x] for x in range(0, 600)])
         pygame.display.update()
         #for obj in self.objects:
         #    obj.update()
