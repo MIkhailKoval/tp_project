@@ -50,26 +50,35 @@ class main_window():
 
             while currentNumOfFighters > 1:
                 for currentFighter in fighters:
-                    wasShoot = False
-                    while not wasShoot:
-                        event = pygame.event.wait()
+                    pygame.key.set_repeat(500, 500 // FPS)
+                    if currentFighter.health <= 0:
+                        continue
+                    while True:
+                        event = pygame.event.poll()
                         if event.type == pygame.QUIT:
                             pygame.quit()
                             sys.exit()
                         elif event.type == pygame.KEYDOWN:
-                            pressedCtrl = (event.mod == pygame.KMOD_CTRL)
-                            if(event.key == control.clockwiseRotationMuzzle):
+                            pressed_keys = pygame.key.get_pressed()
+                            pressed_mod_keys = pygame.key.get_mods()
+                            pressedCtrl = bool(
+                                pressed_mod_keys & pygame.KMOD_CTRL)
+                            if pressedCtrl:
+                                print("Ctrl")
+                            if pressed_keys[control.posRotate]:
+                                currentFighter.rotateMuzzle(
+                                    1 + 9 * pressedCtrl)
+                                print("LEFT")
+                            if pressed_keys[control.negRotate]:
                                 currentFighter.rotateMuzzle(
                                     -1 - 9 * pressedCtrl)
                                 print("RIGHT")
-                            elif event.key == control.anticlockwiseRotationMuzzle:
-                                currentFighter.rotateMuzzle(1 +
-                                                            9 * pressedCtrl)
-                                print("LEFT")
-                            elif event.key == control.shoot:
+                            if pressed_keys[control.shoot]:
+                                pygame.key.set_repeat(0, 0)
                                 currentFighter.shoot()
-                                wasShoot = True
                                 print("ENTER")
+                                break
+                        clock.tick(FPS)
 
 
 main_window()
