@@ -1,17 +1,13 @@
-class weapon:
+class Weapon:
     gravitation = True
-    pass
 
 
 # численные значения условны, просто обозначены поля
-# в питоне можно объявить переменную, но ничем пока не инициализировать?
-'''можно'''
-class usualBomb(weapon):
-    radius = 10
-    '''radius = int()'''
-    damage = 50
+class UsualBomb(Weapon):
+    radius = int()
+    damage = int()
 
 
-class laser(weapon):
-    damage = 1000
+class Laser(Weapon):
+    damage = int()
     gravitation = False
