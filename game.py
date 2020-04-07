@@ -13,6 +13,8 @@ WHITE = (255, 255, 255)
 PINK = (255, 100, 180)
 ORANGE = (255, 100, 10)
 YELLOW = (255, 255, 0)
+GREEN = (0, 255, 0)
+
 # PARAMETERS
 WIDTH = 800
 HEIGHT = 600
@@ -24,17 +26,16 @@ class main_window():
         pygame.init()
         self.height = 400
         self.width = 600
-        self.window = pygame.display.set_mode((self.width, self.height))
+        graphics.window = pygame.display.set_mode((self.width, self.height))
         self.update()
         self.objects = []
         self.cycle()
+        pygame.draw.rect(graphics.window, gamesettings.backgroundColour, (0, 0, 600, 200))
+        pygame.display.update()
 
     def update(self):
         # пока просто для наполненности написал:
-        pygame.draw.rect(self.window, YELLOW, (0, 0, 600, 200))
-        pygame.draw.rect(self.window, LIGHT_BLUE, (0, 200, 600, 400))
-        pygame.draw.lines(self.window, BLACK, False, [
-                          [30 * math.sin(x), 30 * x] for x in range(0, 600)])
+        pygame.draw.rect(graphics.window, YELLOW, (0, 0, 600, 400))
         pygame.display.update()
         # for obj in self.objects:
         #    obj.update()
@@ -46,7 +47,9 @@ class main_window():
             fighters = list()
             for i in range(gamesettings.numberOfFighters):
                 # здесь инициализация танков, определение их местоположения и первая отрисовка
-                fighters.append(graphics.Tank())
+                x = 300
+                y = 300
+                fighters.append(graphics.Tank(x, y))
 
             while currentNumOfFighters > 1:
                 for currentFighter in fighters:
@@ -82,3 +85,4 @@ class main_window():
 
 
 main_window()
+

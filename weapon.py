@@ -11,3 +11,4 @@ class UsualBomb(Weapon):
 class Laser(Weapon):
     damage = int()
     gravitation = False
+
