@@ -1,50 +1,44 @@
 import control
 import gamesettings
+import gamesettings as gs
 import graphics
 import player
 import pygame
 import sys
+import map
 from numpy import math
-
-# PARAMETERS
-WIDTH = 400
-HEIGHT = 600
-FPS = 60
-
 
 class main_window():
     def __init__(self):
         pygame.init()
-        self.height = 400
-        self.width = 600
-        graphics.window = pygame.display.set_mode((self.width, self.height))
+        graphics.window = pygame.display.set_mode((gs.HEIGHT, gs.WIDTH))
         self.update()
         self.objects = []
-        self.cycle()
-        pygame.draw.rect(graphics.window, gamesettings.backgroundColour, (0, 0, 600, 200))
+        map.Map()
         pygame.display.update()
+        self.cycle()
 
     def update(self):
-        # пока просто для наполненности написал:
-        pygame.draw.rect(graphics.window, graphics.YELLOW, (0, 0, 600, 400))
+        pygame.draw.rect(graphics.window, gamesettings.backgroundColour, (0, 0, gs.HEIGHT, gs.WIDTH))
         pygame.display.update()
         # for obj in self.objects:
         #    obj.update()
 
     def cycle(self):
         clock = pygame.time.Clock()
+        map.Map()
         while True:
-            currentNumOfFighters = gamesettings.numberOfFighters
+            currentNumOfFighters = gs.numberOfFighters
             fighters = list()
-            for i in range(gamesettings.numberOfFighters):
+            for i in range(gs.numberOfFighters):
                 # здесь инициализация танков, определение их местоположения и первая отрисовка
-                x = 300
+                x = 300 
                 y = 300
                 fighters.append(graphics.Tank(x, y))
 
             while currentNumOfFighters > 1:
                 for currentFighter in fighters:
-                    pygame.key.set_repeat(500, 500 // FPS)
+                    pygame.key.set_repeat(500, 500 // gs.FPS)
                     if currentFighter.health <= 0:
                         continue
                     while True:
@@ -72,7 +66,9 @@ class main_window():
                                 currentFighter.shoot()
                                 print("ENTER")
                                 break
-                        clock.tick(FPS)
+                        clock.tick(gs.FPS)
+            print('Win')
+            sys.exit()
 
 
 main_window()
