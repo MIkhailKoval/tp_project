@@ -6,6 +6,16 @@ import math
 TYPE_OF_GRAPHICS = 0
 window = ''
 
+# COLORS
+LIGHT_BLUE = (0, 255, 255)
+RED = (255, 0, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+PINK = (255, 100, 180)
+ORANGE = (255, 100, 10)
+YELLOW = (255, 255, 0)
+GREEN = (0, 255, 0)
+
 class Weapon(weapon.Weapon):
     pass
 
@@ -15,10 +25,10 @@ class Tank(player.Player):
         self.angle = -1  
         self.x = x
         self.y = y
-        self.colour = (0, 255, 0)
+        self.colour = GREEN
 
     def rotateMuzzle(self, angle):
-        draw_tank(self, (255, 255, 0) )
+        draw_tank(self, YELLOW )
         self.angle += angle * 0.03
         print(self.angle)
         (self.colour, gamesettings.backgroundColour) = ( gamesettings.backgroundColour, self.colour) 
@@ -32,7 +42,7 @@ class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
     pass
 
-def draw_tank(tank, colour =(0,0,0)):
+def draw_tank(tank, colour =BLACK):
     # нарисовали тело танка
     print(tank.colour)
     r = 30

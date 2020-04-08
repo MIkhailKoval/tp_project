@@ -5,18 +5,9 @@ import player
 import pygame
 import sys
 from numpy import math
-# COLORS
-LIGHT_BLUE = (0, 255, 255)
-RED = (255, 0, 0)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-PINK = (255, 100, 180)
-ORANGE = (255, 100, 10)
-YELLOW = (255, 255, 0)
-GREEN = (0, 255, 0)
 
 # PARAMETERS
-WIDTH = 800
+WIDTH = 400
 HEIGHT = 600
 FPS = 60
 
@@ -35,7 +26,7 @@ class main_window():
 
     def update(self):
         # пока просто для наполненности написал:
-        pygame.draw.rect(graphics.window, YELLOW, (0, 0, 600, 400))
+        pygame.draw.rect(graphics.window, graphics.YELLOW, (0, 0, 600, 400))
         pygame.display.update()
         # for obj in self.objects:
         #    obj.update()
