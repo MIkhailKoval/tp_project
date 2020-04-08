@@ -1,12 +1,13 @@
 import control
+import environment
 import gamesettings
 import gamesettings as gs
 import graphics
 import player
 import pygame
 import sys
-import map
 from numpy import math
+
 
 class main_window():
     def __init__(self):
@@ -14,31 +15,30 @@ class main_window():
         graphics.window = pygame.display.set_mode((gs.HEIGHT, gs.WIDTH))
         self.update()
         self.objects = []
-        map.Map()
         pygame.display.update()
         self.cycle()
 
     def update(self):
-        pygame.draw.rect(graphics.window, gamesettings.backgroundColour, (0, 0, gs.HEIGHT, gs.WIDTH))
+        pygame.draw.rect(
+            graphics.window, gamesettings.backgroundColour, (0, 0, gs.HEIGHT, gs.WIDTH))
         pygame.display.update()
         # for obj in self.objects:
         #    obj.update()
 
     def cycle(self):
         clock = pygame.time.Clock()
-        map.Map()
         while True:
+            self.map = environment.Map()
             currentNumOfFighters = gs.numberOfFighters
             fighters = list()
             for i in range(gs.numberOfFighters):
                 # здесь инициализация танков, определение их местоположения и первая отрисовка
-                x = 300 
-                y = 300
-                fighters.append(graphics.Tank(x, y))
+                fighters.append(graphics.Tank(self.map, i))
+            pygame.display.update()
 
             while currentNumOfFighters > 1:
                 for currentFighter in fighters:
-                    pygame.key.set_repeat(500, 500 // gs.FPS)
+                    pygame.key.set_repeat(100, 1000 // gs.FPS)
                     if currentFighter.health <= 0:
                         continue
                     while True:
@@ -55,12 +55,19 @@ class main_window():
                                 print("Ctrl")
                             if pressed_keys[control.posRotate]:
                                 currentFighter.rotateMuzzle(
-                                    1 + 9 * pressedCtrl)
-                                print("LEFT")
+                                    1 + 4 * pressedCtrl)
+                                print("RIGHT")
                             if pressed_keys[control.negRotate]:
                                 currentFighter.rotateMuzzle(
-                                    -1 - 9 * pressedCtrl)
-                                print("RIGHT")
+                                    -1 - 4 * pressedCtrl)
+                                print("LEFT")
+                            if pressed_keys[control.boostForce]:
+                                currentFighter.changeForce(1 + 4 * pressedCtrl)
+                                print("UP")
+                            if pressed_keys[control.reduceForce]:
+                                currentFighter.changeForce(-1 -
+                                                           4 * pressedCtrl)
+                                print("DOWN")
                             if pressed_keys[control.shoot]:
                                 pygame.key.set_repeat(0, 0)
                                 currentFighter.shoot()
@@ -72,4 +79,3 @@ class main_window():
 
 
 main_window()
-
