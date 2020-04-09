@@ -1,4 +1,4 @@
-numberOfFighters = 3
+numberOfFighters = 9
 isBot = (False, False)
 maxWind = 0
 existsReflection = False
@@ -8,3 +8,4 @@ reliefColour = (0, 255, 0)
 WIDTH = 600
 HEIGHT = 400
 FPS = 60
+gunColour = (0, 0, 255)

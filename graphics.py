@@ -8,7 +8,7 @@ import math
 import random
 TYPE_OF_GRAPHICS = 0
 window = ''
-
+plan = ''
 # COLORS
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
@@ -40,26 +40,26 @@ def degrees(angleIndex):
 
 
 class Tank(player.Player):
-    def __init__(self, map, number):
+    def __init__(self, number):
         self.angle = math.pi / 2
-        self.x, self.y = map.getCoord(
+        self.x, self.y = plan.getCoord(
             gs.WIDTH // (gs.numberOfFighters + 1) * (number + 1))
         self.y += 6
         self.t = (0, 0)
         self.colour = RED
         # вставил костыль для отрисовки танков. Надо исправить!
-        self.rotateMuzzle(0)
+        draw_tank(self)
+        '''да нормас'''
 
     @degrees(2)
     def rotateMuzzle(self, angle):
-        draw_tank(self, gs.backgroundColour)
+        draw_muzzer(self, gs.backgroundColour)
         self.angle += angle
         if self.angle > math.pi:
             self.angle -= math.pi
         if self.angle < 0:
             self.angle += math.pi
-        #print("angle", int(self.angle * 180 / math.pi))
-        draw_tank(self)
+        draw_muzzer(self)
 
     def changeForce(self, value):
         self.force += value
@@ -79,40 +79,48 @@ class Info:
     pass
 
 
-def draw_tank(tank, colour=BLACK):
+def draw_tank(tank):
     # нарисовали тело танка
     r = 10
     x = -r * 10 - 1
     while x < r * 10:
         x += 1
         t = (tank.x - x / 10,  - math.sqrt(r * r - (x) ** 2 / 100) + tank.y)
-        pygame.draw.line(window, tank.colour, t, (tank.x - x / 10, tank.y), 3)
+        pygame.draw.line(window, tank.colour, t, (tank.x - x / 10, tank.y), 2)
+    draw_muzzer(tank)
+
+def draw_muzzer(tank, colour = BLACK):
     # рисуем дуло
-    rd = r + 4
+    rd = 14
     x = rd * math.cos(tank.angle)
-    t = (tank.x + x, - math.sqrt(rd * rd - (x) ** 2) + tank.y - r)
+    t = (tank.x + x, - math.sqrt(rd * rd - (x) ** 2) + tank.y - 10)
     tank.t = t
-    pygame.draw.line(window, colour, t, (tank.x, tank.y - r), 3)
+    pygame.draw.line(window, colour, t, (tank.x, tank.y - 10 - 2), 3)
     pygame.display.update()
+                
 
 def shoot(tank, colour = BLUE):
+    plan.update()
     v = tank.force / 12.5
-    x = 0
-    y = 0
-    t = 0
+    (x, y, t) = (0, 0, 0)
     while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
         x = v * math.cos(tank.angle) * t
         y = v * math.sin(tank.angle) * t - t * t / 10
-        new_x = int(tank.t[1] - y)
-        new_y = int(tank.t[0] + x)
-        window.set_at((new_y, new_x), colour)
+        y = int(tank.t[1] - y)
+        x = int(tank.t[0] + x)
+        print(x, y)
+        if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:    
+            if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
+                print(window.get_at((x, y)), '   ' , BLUE)
+                break
+            window.set_at((x, y), colour)
         t += 0.01
     pygame.display.update()
+    # здесь вызывай взрыв в точке x, y
 
 
 class Map:
     def __init__(self):
-        self.matrix = [[gs.backgroundColour for i in range(gs.HEIGHT)] for j in range(gs.WIDTH)]
         self.reflection = random.randint(0, gs.existsReflection)
         self.wind = random.randint(0, gs.maxWind)
         self.draw_relief()
@@ -124,8 +132,8 @@ class Map:
         for (x, y_min) in points:
             for y in range(int(y_min + 0.5), gs.HEIGHT):
                 window.set_at((x, y), gs.reliefColour)
-                self.matrix[x][y] = gs.reliefColour 
-        #pygame.draw.lines(window, gs.reliefColour, False, points)
-    
-    def new_tank(self):
-        pass
+    def update(self):
+        for x in range(gs.WIDTH):
+            for y in range(gs.HEIGHT):
+                if window.get_at((x, y)) == BLUE:
+                    window.set_at((x, y), gs.backgroundColour)
