@@ -1,4 +1,4 @@
-numberOfFighters = 8
+numberOfFighters = 3
 isBot = (False, False)
 maxWind = 0
 existsReflection = False
