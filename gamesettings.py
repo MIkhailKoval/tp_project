@@ -4,6 +4,6 @@ maxWind = 0
 existsReflection = False
 backgroundColour = (0, 255, 255)
 # PARAMETERS
-WIDTH = 400
-HEIGHT = 600
+WIDTH = 600
+HEIGHT = 400
 FPS = 60

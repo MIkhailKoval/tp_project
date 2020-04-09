@@ -42,7 +42,7 @@ class Tank(player.Player):
     def __init__(self, map, number):
         self.angle = math.pi / 2
         self.x, self.y = map.relief.getCoord(
-            gs.HEIGHT // (gs.numberOfFighters + 1) * (number + 1))
+            gs.WIDTH // (gs.numberOfFighters + 1) * (number + 1))
         self.y += 6
         self.t = (0, 0)
         self.colour = RED
@@ -57,7 +57,7 @@ class Tank(player.Player):
             self.angle -= math.pi
         if self.angle < 0:
             self.angle += math.pi
-        print("angle", int(self.angle * 180 / math.pi))
+        #print("angle", int(self.angle * 180 / math.pi))
         draw_tank(self)
 
     def changeForce(self, value):
@@ -69,24 +69,8 @@ class Tank(player.Player):
         print("force", self.force)
 
     def shoot(self):
-        v = self.force / 12.5
-        x = 0
-        y = 0
-        t = 0
-        # print(self.t)
-        while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
-            x = v * math.cos(self.angle) * t
-            y = v * math.sin(self.angle) * t - t * t / 10
-            new_x = int(self.t[1] - y)
-            new_y = int(self.t[0] + x)
-            window.set_at((new_y, new_x), ORANGE)
-            t += 0.01
-        '''
-        for i in range(600):
-            window.set_at((i, int(self.t[1])), ORANGE)
-        for j in range(400):
-            window.set_at((int(self.t[0]), j), ORANGE)'''
-        pygame.display.update()
+        shoot(self)
+
 
 
 class Info:
@@ -110,17 +94,30 @@ def draw_tank(tank, colour=BLACK):
     pygame.draw.line(window, colour, t, (tank.x, tank.y - r), 3)
     pygame.display.update()
 
+def shoot(tank, colour = BLUE):
+    v = tank.force / 12.5
+    x = 0
+    y = 0
+    t = 0
+    while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
+        x = v * math.cos(tank.angle) * t
+        y = v * math.sin(tank.angle) * t - t * t / 10
+        new_x = int(tank.t[1] - y)
+        new_y = int(tank.t[0] + x)
+        window.set_at((new_y, new_x), colour)
+        t += 0.01
+    pygame.display.update()
 
 class Relief:
     def __init__(self):
         self.draw()
 
     def getCoord(self, t):
-        return [t, t*(t-100)*(t-400)*(t-600) / 20000000 + 210]
+        return [t, t*(t - 100)*(t - gs.WIDTH)*(t - gs.HEIGHT) / 20000000 + 210]
 
     def draw(self):
-        points = [self.getCoord(x) for x in range(0, 600)]
+        points = [self.getCoord(x) for x in range(gs.WIDTH)]
         for (x, y_min) in points:
-            for y in range(int(y_min + 0.5), 401):
+            for y in range(int(y_min + 0.5), gs.HEIGHT):
                 window.set_at((x, y), GREEN)
         pygame.draw.lines(window, GREEN, False, points)

@@ -12,7 +12,7 @@ from numpy import math
 class main_window():
     def __init__(self):
         pygame.init()
-        graphics.window = pygame.display.set_mode((gs.HEIGHT, gs.WIDTH))
+        graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         self.update()
         self.objects = []
         pygame.display.update()
@@ -20,7 +20,7 @@ class main_window():
 
     def update(self):
         pygame.draw.rect(
-            graphics.window, gamesettings.backgroundColour, (0, 0, gs.HEIGHT, gs.WIDTH))
+            graphics.window, gamesettings.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         pygame.display.update()
         # for obj in self.objects:
         #    obj.update()
