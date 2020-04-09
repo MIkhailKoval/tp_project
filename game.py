@@ -28,12 +28,13 @@ class main_window():
     def cycle(self):
         clock = pygame.time.Clock()
         while True:
-            self.map = environment.Map()
+            self.map = graphics.Map()
+            graphics.plan = self.map
             currentNumOfFighters = gs.numberOfFighters
             fighters = list()
             for i in range(gs.numberOfFighters):
                 # здесь инициализация танков, определение их местоположения и первая отрисовка
-                fighters.append(graphics.Tank(self.map, i))
+                fighters.append(graphics.Tank(i))
             pygame.display.update()
 
             while currentNumOfFighters > 1:
