@@ -5,6 +5,7 @@ import weapon
 import pygame
 import gamesettings as gs
 import math
+import random
 TYPE_OF_GRAPHICS = 0
 window = ''
 
@@ -20,7 +21,7 @@ YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
 MAX_FORCE = 200
 MIN_FORCE = 1
-
+#
 
 class Weapon(weapon.Weapon):
     pass
@@ -41,7 +42,7 @@ def degrees(angleIndex):
 class Tank(player.Player):
     def __init__(self, map, number):
         self.angle = math.pi / 2
-        self.x, self.y = map.relief.getCoord(
+        self.x, self.y = map.getCoord(
             gs.WIDTH // (gs.numberOfFighters + 1) * (number + 1))
         self.y += 6
         self.t = (0, 0)
@@ -108,16 +109,23 @@ def shoot(tank, colour = BLUE):
         t += 0.01
     pygame.display.update()
 
-class Relief:
-    def __init__(self):
-        self.draw()
 
+class Map:
+    def __init__(self):
+        self.matrix = [[gs.backgroundColour for i in range(gs.HEIGHT)] for j in range(gs.WIDTH)]
+        self.reflection = random.randint(0, gs.existsReflection)
+        self.wind = random.randint(0, gs.maxWind)
+        self.draw_relief()
     def getCoord(self, t):
         return [t, t*(t - 100)*(t - gs.WIDTH)*(t - gs.HEIGHT) / 20000000 + 210]
 
-    def draw(self):
+    def draw_relief(self):
         points = [self.getCoord(x) for x in range(gs.WIDTH)]
         for (x, y_min) in points:
             for y in range(int(y_min + 0.5), gs.HEIGHT):
-                window.set_at((x, y), GREEN)
-        pygame.draw.lines(window, GREEN, False, points)
+                window.set_at((x, y), gs.reliefColour)
+                self.matrix[x][y] = gs.reliefColour 
+        #pygame.draw.lines(window, gs.reliefColour, False, points)
+    
+    def new_tank(self):
+        pass

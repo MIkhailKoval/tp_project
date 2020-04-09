@@ -28,7 +28,7 @@ class main_window():
     def cycle(self):
         clock = pygame.time.Clock()
         while True:
-            self.map = environment.Map()
+            self.map = graphics.Map()
             currentNumOfFighters = gs.numberOfFighters
             fighters = list()
             for i in range(gs.numberOfFighters):
