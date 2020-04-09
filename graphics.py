@@ -46,7 +46,7 @@ class Tank(player.Player):
             gs.WIDTH // (gs.numberOfFighters + 1) * (number + 1))
         self.y += 6
         self.t = (0, 0)
-        self.colour = RED
+        self.colour = WHITE
         # вставил костыль для отрисовки танков. Надо исправить!
         draw_tank(self)
         '''да нормас'''
@@ -103,19 +103,28 @@ def shoot(tank, colour = BLUE):
     plan.update()
     v = tank.force / 12.5
     (x, y, t) = (0, 0, 0)
+    snaryad = 0
+    a = []
     while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
         x = v * math.cos(tank.angle) * t
         y = v * math.sin(tank.angle) * t - t * t / 10
         y = int(tank.t[1] - y)
         x = int(tank.t[0] + x)
         print(x, y)
+        snaryad += 1
         if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:    
             if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                 print(window.get_at((x, y)), '   ' , BLUE)
                 break
             window.set_at((x, y), colour)
+            window.set_at((x+1,y), colour)
+            a.append((x,y))
+        #if snaryad > 7:
+        #window.set_at(a[-7], gs.backgroundColour)
+        #window.set_at((a[-7][0] + 1,a[-7][1]), gs.backgroundColour)
+        '''нижнюю строчку надо в иф'''
+        pygame.display.update()
         t += 0.01
-    pygame.display.update()
     # здесь вызывай взрыв в точке x, y
 
 
