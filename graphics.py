@@ -1,5 +1,6 @@
 import player
 import environment
+import functools
 import weapon
 import pygame
 import gamesettings as gs
@@ -17,10 +18,24 @@ PINK = (255, 100, 180)
 ORANGE = (255, 100, 10)
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
+MAX_FORCE = 200
+MIN_FORCE = 1
 
 
 class Weapon(weapon.Weapon):
     pass
+
+
+def degrees(angleIndex):
+    def wrapper(func):
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
+            args = list(args)
+            args[angleIndex - 1] *= math.pi / 180
+            args = tuple(args)
+            return func(*args, **kwargs)
+        return inner
+    return wrapper
 
 
 class Tank(player.Player):
@@ -34,26 +49,34 @@ class Tank(player.Player):
         # вставил костыль для отрисовки танков. Надо исправить!
         self.rotateMuzzle(0)
 
+    @degrees(2)
     def rotateMuzzle(self, angle):
         draw_tank(self, gs.backgroundColour)
-        # пока просто сделаю поворот на 10 градусов
-        self.angle += math.pi / 80
-        print(self.angle)
+        self.angle += angle
+        if self.angle > math.pi:
+            self.angle -= math.pi
+        if self.angle < 0:
+            self.angle += math.pi
+        print("angle", int(self.angle * 180 / math.pi))
         draw_tank(self)
 
-
     def changeForce(self, value):
-        pass
+        self.force += value
+        if self.force > MAX_FORCE:
+            self.force = MAX_FORCE
+        elif self.force < MIN_FORCE:
+            self.force = MIN_FORCE
+        print("force", self.force)
 
     def shoot(self):
-        v = 10
+        v = self.force / 12.5
         x = 0
         y = 0
         t = 0
-        #print(self.t)
+        # print(self.t)
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t
-            y = v * math.sin(self.angle) * t -  t * t / 10
+            y = v * math.sin(self.angle) * t - t * t / 10
             new_x = int(self.t[1] - y)
             new_y = int(self.t[0] + x)
             window.set_at((new_y, new_x), ORANGE)
@@ -64,7 +87,7 @@ class Tank(player.Player):
         for j in range(400):
             window.set_at((int(self.t[0]), j), ORANGE)'''
         pygame.display.update()
-        
+
 
 class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
