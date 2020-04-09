@@ -21,6 +21,8 @@ GREEN = (0, 255, 0)
 MAX_FORCE = 200
 MIN_FORCE = 1
 
+tanks = set()
+
 
 class Weapon(weapon.Weapon):
     pass
@@ -42,7 +44,7 @@ class Tank(player.Player):
     def __init__(self, map, number):
         self.angle = math.pi / 2
         self.x, self.y = map.relief.getCoord(
-            gs.WIDTH // (gs.numberOfFighters + 1) * (number + 1))
+            0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
         self.y += 6
         self.t = (0, 0)
         self.colour = RED
@@ -72,7 +74,6 @@ class Tank(player.Player):
         shoot(self)
 
 
-
 class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
     pass
@@ -80,6 +81,8 @@ class Info:
 
 def draw_tank(tank, colour=BLACK):
     # нарисовали тело танка
+    if not tank in tanks:
+        tanks.add(tank)
     r = 10
     x = -r * 10 - 1
     while x < r * 10:
@@ -94,7 +97,8 @@ def draw_tank(tank, colour=BLACK):
     pygame.draw.line(window, colour, t, (tank.x, tank.y - r), 3)
     pygame.display.update()
 
-def shoot(tank, colour = BLUE):
+
+def shoot(tank, colour=BLUE):
     v = tank.force / 12.5
     x = 0
     y = 0
@@ -107,6 +111,23 @@ def shoot(tank, colour = BLUE):
         window.set_at((new_y, new_x), colour)
         t += 0.01
     pygame.display.update()
+
+
+def updateTanks():
+    for tank in tanks:
+        if tank.health > 0:
+            draw_tank(tank)
+
+
+def explosion(x, y, r):
+    pygame.draw.circle(window, RED, (int(x), int(y)), int(r))
+    updateTanks()
+    pygame.display.update()
+    pygame.time.wait(800)
+    pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
+    updateTanks()
+    pygame.display.update()
+
 
 class Relief:
     def __init__(self):
