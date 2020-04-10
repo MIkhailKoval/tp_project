@@ -132,6 +132,9 @@ def shoot(tank, colour = BLUE):
     pygame.display.update()
     if x <= gs.WIDTH and x >= 0:
         explosion(x, y, 30)
+    plan.update()
+    pygame.display.update()
+
 
 
 def updateTanks():
