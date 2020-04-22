@@ -1,4 +1,4 @@
-import player
+import tank
 import environment
 import functools
 import weapon
@@ -25,6 +25,7 @@ MIN_FORCE = 1
 
 tanks = set()
 
+
 class Weapon(weapon.Weapon):
     pass
 
@@ -41,7 +42,7 @@ def degrees(angleIndex):
     return wrapper
 
 
-class Tank(player.Player):
+class Tank(tank.Tank):
     def __init__(self, number):
         self.angle = math.pi / 2
         self.x, self.y = plan.getCoord(
@@ -92,7 +93,8 @@ def draw_tank(tank):
         pygame.draw.line(window, tank.colour, t, (tank.x - x / 10, tank.y), 2)
     draw_muzzer(tank)
 
-def draw_muzzer(tank, colour = BLACK):
+
+def draw_muzzer(tank, colour=BLACK):
     # рисуем дуло
     rd = 14
     x = rd * math.cos(tank.angle)
@@ -100,10 +102,9 @@ def draw_muzzer(tank, colour = BLACK):
     tank.t = t
     pygame.draw.line(window, colour, t, (tank.x, tank.y - 10 - 2), 3)
     pygame.display.update()
-                
 
 
-def shoot(tank, colour = BLUE):
+def shoot(tank, colour=BLUE):
     plan.update()
     v = tank.force / 12.5
     (x, y, t) = (0, 0, 0)
@@ -115,17 +116,17 @@ def shoot(tank, colour = BLUE):
         y = int(tank.t[1] - y)
         x = int(tank.t[0] + x)
         snaryad += 1
-        if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:    
+        if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
             if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                 break
             window.set_at((x, y), colour)
-            window.set_at((x+1,y), colour)
-            a.append((x,y))
+            window.set_at((x+1, y), colour)
+            a.append((x, y))
             '''
             if snaryad > 10:
             window.set_at(a[-10], gs.backgroundColour)
             window.set_at((a[-10][0] + 1,a[-10][1]), gs.backgroundColour)'''
-            if snaryad % 7 == 0: 
+            if snaryad % 7 == 0:
                 pygame.display.update()
         t += 0.01
     # здесь вызывай взрыв в точке x, y
@@ -134,7 +135,6 @@ def shoot(tank, colour = BLUE):
         explosion(x, y, 30)
     plan.update()
     pygame.display.update()
-
 
 
 def updateTanks():
@@ -158,6 +158,7 @@ class Map:
         self.reflection = random.randint(0, gs.existsReflection)
         self.wind = random.randint(0, gs.maxWind)
         self.draw_relief()
+
     def getCoord(self, t):
         return [t, t*(t - 100)*(t - gs.WIDTH)*(t - gs.HEIGHT) / 20000000 + 210]
 
@@ -166,6 +167,7 @@ class Map:
         for (x, y_min) in points:
             for y in range(int(y_min + 0.5), gs.HEIGHT):
                 window.set_at((x, y), gs.reliefColour)
+
     def update(self):
         for x in range(gs.WIDTH):
             for y in range(gs.HEIGHT):

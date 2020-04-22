@@ -1,21 +1,7 @@
-import weapon
-from abc import ABC, abstractmethod
+import fighter
+from visitor import Visitor
 
 
-class Player(ABC):
-    angle = 0
-    force = 1000
-    health = 100
-    currentWeapon = "usualBomb"
-
-    @abstractmethod
-    def rotateMuzzle(self, angle):
-        pass
-
-    @abstractmethod
-    def changeForce(self, value):
-        pass
-
-    @abstractmethod
-    def shoot(self):
-        pass
+class Player(fighter.fighter):
+    def accept(self, visitor: Visitor):
+        visitor.movePlayer(self)
