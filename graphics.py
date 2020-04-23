@@ -50,9 +50,7 @@ class Tank(tank.Tank):
         self.y += 6
         self.t = (0, 0)
         self.colour = WHITE
-        # вставил костыль для отрисовки танков. Надо исправить!
         draw_tank(self)
-        '''да нормас'''
 
     @degrees(2)
     def rotateMuzzle(self, angle):
@@ -64,6 +62,9 @@ class Tank(tank.Tank):
             self.angle += math.pi
         draw_muzzer(self)
 
+    def shoot(self):
+        shoot(self)
+    
     def changeForce(self, value):
         self.force += value
         if self.force > MAX_FORCE:
@@ -72,17 +73,12 @@ class Tank(tank.Tank):
             self.force = MIN_FORCE
         print("force", self.force)
 
-    def shoot(self):
-        shoot(self)
-
-
 class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
     pass
 
 
 def draw_tank(tank):
-    # нарисовали тело танка
     if not tank in tanks:
         tanks.add(tank)
     r = 10
@@ -95,7 +91,6 @@ def draw_tank(tank):
 
 
 def draw_muzzer(tank, colour=BLACK):
-    # рисуем дуло
     rd = 14
     x = rd * math.cos(tank.angle)
     t = (tank.x + x, - math.sqrt(rd * rd - (x) ** 2) + tank.y - 10)
@@ -122,14 +117,9 @@ def shoot(tank, colour=BLUE):
             window.set_at((x, y), colour)
             window.set_at((x+1, y), colour)
             a.append((x, y))
-            '''
-            if snaryad > 10:
-            window.set_at(a[-10], gs.backgroundColour)
-            window.set_at((a[-10][0] + 1,a[-10][1]), gs.backgroundColour)'''
             if snaryad % 7 == 0:
                 pygame.display.update()
         t += 0.01
-    # здесь вызывай взрыв в точке x, y
     pygame.display.update()
     if x <= gs.WIDTH and x >= 0:
         explosion(x, y, 30)
