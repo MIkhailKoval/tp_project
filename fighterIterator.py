@@ -1,8 +1,8 @@
+from __future__ import annotations
 from fighter import Fighter
 from collections.abc import Iterable, Iterator
 from gamesettings import numberOfFighters
 from typing import List
-from __future__ import annotations
 
 
 class FighterIterator(Iterator):

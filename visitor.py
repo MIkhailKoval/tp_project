@@ -1,11 +1,12 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 import control
+from fighter import Fighter
 import sys
 from pygame.constants import (
     QUIT, KEYDOWN
 )
 import pygame
-from player import Player
 
 
 class Visitor(ABC):
@@ -19,6 +20,9 @@ class Visitor(ABC):
 
 
 class fightVisitor(Visitor):
+    def __init__(self):
+        pass
+
     def movePlayer(self, player: Player):
         event = pygame.event.poll()
         if event.type == QUIT:
@@ -55,3 +59,8 @@ class fightVisitor(Visitor):
 
     def moveBot(self):
         pass
+
+
+class Player(Fighter):
+    def accept(self, visitor: Visitor):
+        visitor.movePlayer(self)

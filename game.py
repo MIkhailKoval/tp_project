@@ -4,7 +4,7 @@ import fighterIterator
 import gamesettings
 import gamesettings as gs
 import graphics
-import player
+from visitor import Player, fightVisitor
 import tank
 import pygame
 import sys
@@ -39,12 +39,13 @@ class main_window():
             fighters = fighterIterator.Fighters()
             for i in range(gs.numberOfFighters):
                 # здесь инициализация танков, определение их местоположения и первая отрисовка
-                fighters.add(player.Player(graphics.Tank(i)))
+                fighters.add(Player(graphics.Tank(i)))
             pygame.display.update()
 
             fighter = fighters.__iter__()
+            visitor = fightVisitor()
             for currentFighter in fighter:
-                currentFighter.move()
+                currentFighter.accept(visitor)
                 clock.tick(gs.FPS)
             print('Win')
             sys.exit()

@@ -16,10 +16,6 @@ class Tank(ABC):
         pass
 
     @abstractmethod
-    def getForce(self) -> float:
-        pass
-
-    @abstractmethod
     def setHealth(self, percent):
         pass
 
@@ -28,9 +24,5 @@ class Tank(ABC):
         pass
 
     @abstractmethod
-    def setForce(self, percent):
-        pass
-
-    @abstractmethod
-    def shoot(self, weapon):
+    def shoot(self, weapon, force):
         pass

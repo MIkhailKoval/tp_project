@@ -5,6 +5,7 @@ class Fighter(ABC):
     currentWeapon = str()
     score = int()
     health = float()
+    force = 100
 
     def __init__(self, impl):
         self.impl = impl
@@ -14,11 +15,10 @@ class Fighter(ABC):
         self.impl.setAngle(currentAngle + angle)
 
     def changeForce(self, percent: float):
-        currentForce = self.impl.getForce()
-        self.impl.setForce(min(max(0, currentForce + percent), 1))
+        self.force = min(max(0, self.force + percent), 1)
 
     def shoot(self):
-        self.impl.shoot(self.currentWeapon)
+        self.impl.shoot(self.currentWeapon, self.force)
 
     def isAlive(self):
         return self.health > 0
