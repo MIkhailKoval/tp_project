@@ -27,8 +27,6 @@ class main_window():
         pygame.draw.rect(
             graphics.window, gamesettings.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         pygame.display.update()
-        # for obj in self.objects:
-        #    obj.update()
 
     def cycle(self):
         clock = pygame.time.Clock()

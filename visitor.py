@@ -1,4 +1,4 @@
-from __future__ import annotations
+#from __future__ import annotations
 from abc import ABC, abstractmethod
 import control
 from fighter import Fighter
@@ -11,7 +11,7 @@ import pygame
 
 class Visitor(ABC):
     @abstractmethod
-    def movePlayer(self, player: Player):
+    def movePlayer(self, player: 'Player'):
         pass
 
     @abstractmethod
@@ -23,7 +23,7 @@ class fightVisitor(Visitor):
     def __init__(self):
         pass
 
-    def movePlayer(self, player: Player):
+    def movePlayer(self, player: 'Player'):
         event = pygame.event.poll()
         if event.type == QUIT:
             # pylint: disable=no-member
@@ -62,5 +62,5 @@ class fightVisitor(Visitor):
 
 
 class Player(Fighter):
-    def accept(self, visitor: Visitor):
+    def accept(self, visitor: 'Visitor'):
         visitor.movePlayer(self)
