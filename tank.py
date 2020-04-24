@@ -12,7 +12,7 @@ class Tank(ABC):
         pass
 
     @abstractmethod
-    def setAngle(self, angle):
+    def set_angle(self, angle):
         pass
 
     @abstractmethod

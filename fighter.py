@@ -12,11 +12,12 @@ class Fighter(ABC):
 
     def rotate(self, angle: int):
         currentAngle = self.impl.getAngle()
-        self.impl.setAngle(currentAngle + angle)
+        self.impl.set_angle(currentAngle + angle)
 
-    def changeForce(self, percent: float):
-        self.force = min(max(0, self.force + percent), 1)
-
+    def changeForce(self, delta ):
+        self.force = (self.force + 200 + delta ) % 200
+        print('force ', self.force )
+        
     def shoot(self):
         self.impl.shoot(self.currentWeapon, self.force)
 
