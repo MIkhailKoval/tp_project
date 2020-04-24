@@ -50,6 +50,7 @@ class Tank(tank.Tank):
         self.y += 6
         self.t = (0, 0)
         self.colour = WHITE
+        self.health = 100
         self.draw_tank()
 
     @degrees(2)
@@ -80,7 +81,19 @@ class Tank(tank.Tank):
             t = (self.x - x / 10,  - math.sqrt(r * r - (x) ** 2 / 100) + self.y)
             pygame.draw.line(window, self.colour, t, (self.x - x / 10, self.y), 2)
         self.draw_muzzer()
-    
+
+    def getAngle(self):
+        return  self.angle
+
+    def setAngle(self, angle):
+        pass
+
+    def setHealth(self, percent):
+        pass
+
+    def getHealth(self):
+        pass
+
     def draw_muzzer(self, colour=BLACK):
         rd = 14
         x = rd * math.cos(self.angle)
@@ -89,7 +102,7 @@ class Tank(tank.Tank):
         pygame.draw.line(window, colour, t, (self.x, self.y - 10 - 2), 3)
         pygame.display.update()
     
-    def shoot(self, colour=BLUE):
+    def shoot(self, type_of_weapon, colour=BLUE):
         plan.update()
         v = self.force / 12.5
         (x, y, t) = (0, 0, 0)
