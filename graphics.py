@@ -62,7 +62,7 @@ class Tank(tank.Tank):
         if self.angle < 0:
             self.angle += math.pi
         self.draw_muzzer()
-    
+
     def changeForce(self, value):
         self.force += value
         if self.force > MAX_FORCE:
@@ -70,20 +70,21 @@ class Tank(tank.Tank):
         elif self.force < MIN_FORCE:
             self.force = MIN_FORCE
         print("force", self.force)
-    
+
     def draw_tank(self):
-        if not tank in tanks:
-            tanks.add(tank)
+        if not self in tanks:
+            tanks.add(self)
         r = 10
         x = -r * 10 - 1
         while x < r * 10:
             x += 1
             t = (self.x - x / 10,  - math.sqrt(r * r - (x) ** 2 / 100) + self.y)
-            pygame.draw.line(window, self.colour, t, (self.x - x / 10, self.y), 2)
+            pygame.draw.line(window, self.colour, t,
+                             (self.x - x / 10, self.y), 2)
         self.draw_muzzer()
 
     def getAngle(self):
-        return  self.angle
+        return self.angle
 
     def setAngle(self, angle):
         pass
@@ -101,7 +102,7 @@ class Tank(tank.Tank):
         self.t = t
         pygame.draw.line(window, colour, t, (self.x, self.y - 10 - 2), 3)
         pygame.display.update()
-    
+
     def shoot(self, type_of_weapon, colour=BLUE):
         plan.update()
         v = self.force / 12.5
@@ -128,11 +129,10 @@ class Tank(tank.Tank):
             explosion(x, y, 30)
         plan.update()
         pygame.display.update()
-    
+
 
 def explosion(x, y, r):
     pygame.draw.circle(window, RED, (int(x), int(y)), int(r))
-    updateTanks()
     pygame.display.update()
     pygame.time.wait(800)
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
@@ -144,9 +144,12 @@ def updateTanks():
     for tank in tanks:
         if tank.health > 0:
             tank.draw_tank()
+
+
 class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
     pass
+
 
 '''
 def draw_tank(tank):
@@ -208,6 +211,7 @@ def explosion(x, y, r):
     updateTanks()
     pygame.display.update()
 '''
+
 
 class Map:
     def __init__(self):
