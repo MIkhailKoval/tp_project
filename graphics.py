@@ -34,7 +34,6 @@ class Tank(tank.Tank):
         self.angle = math.pi / 2
         self.x, self.y = plan.getCoord(
             0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
-        self.y += 6
         self.t = (0, 0)
         self.colour = WHITE
         self.health = 1000
@@ -43,7 +42,6 @@ class Tank(tank.Tank):
     def rotateMuzzle(self, angle):
         self.draw_muzzle(gs.backgroundColour)
         self.angle += (angle)
-        print(angle)
         if self.angle > math.pi:
             self.angle = 0.0
         if self.angle < 0:
@@ -72,7 +70,7 @@ class Tank(tank.Tank):
         self.draw_muzzle()
 
     def set_health(self, percent):
-        self.health = percent
+        self.health *= (1 - percent)
 
     def get_health(self):
         return self.health
@@ -88,28 +86,22 @@ class Tank(tank.Tank):
     def shoot(self, type_of_weapon, force, colour=BLUE):
         plan.update()
         v = force/12.5
-        print(v)
         (x, y, t) = (0, 0, 0)
         snaryad = 0
         a = []
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t
             y = v * math.sin(self.angle) * t - t * t / 10
-            print(v)
             y = int(self.t[1] - y)
             x = int(self.t[0] + x)
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
-                print(window.get_at([x, y]))
                 if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
-                    print(window.get_at((x, y)))
                     break
-                for i in range(5):
+                a.append((x, y))
+                for i in range(3):
                     window.set_at((x + i, y), colour)
                 a.append((x, y))
-                if snaryad > 10:
-                    for i in range(5):
-                        window.set_at((a[-10][0]+i, a[-10][1]), gs.backgroundColour)
                 if snaryad % 7 == 0:
                     pygame.display.update()
             t += 0.01
@@ -125,12 +117,16 @@ def explosion(x, y, r):
     pygame.display.update()
     pygame.time.wait(800)
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
+    for tank in tanks:
+        if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
+            tank.set_health(1)      
     updateTanks()
     pygame.display.update()
 
 
 def updateTanks():
-    for tank in tanks:
+    for tank in tanks: 
+        print(tank.health)
         if tank.health > 0:
             tank.draw_tank()
 
@@ -156,9 +152,7 @@ class Map:
                 window.set_at((x, y), gs.reliefColour)
 
     def update(self):
-        print('update')
         for x in range(gs.WIDTH):
             for y in range(gs.HEIGHT):
                 if window.get_at((x, y)) == BLUE:
-                    #print(x,y)
                     window.set_at((x, y), gs.backgroundColour)
