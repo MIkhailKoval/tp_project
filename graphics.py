@@ -50,7 +50,7 @@ class Tank(tank.Tank):
             self.angle = math.pi
         self.draw_muzzle()
 
-    def draw_tank(self):
+    def draw_tank(self, tank_colour = WHITE):
         if not self in tanks:
             print('add')
             tanks.add(self)
@@ -63,7 +63,7 @@ class Tank(tank.Tank):
                              (self.x - x / 10, self.y), 2)
         self.draw_muzzle()
 
-    def getAngle(self):
+    def get_angle(self):
         return self.angle
 
     def set_angle(self, angle):
@@ -72,10 +72,10 @@ class Tank(tank.Tank):
         self.draw_muzzle()
 
     def set_health(self, percent):
-        pass
+        self.health = percent
 
     def get_health(self):
-        pass
+        return self.health
     
     def draw_muzzle(self, colour=BLACK):
         rd = 14
@@ -85,10 +85,10 @@ class Tank(tank.Tank):
         pygame.draw.line(window, colour, t, (self.x, self.y - 10 - 2), 3)
         pygame.display.update()
 
-    def shoot(self, type_of_weapon, colour=BLUE):
+    def shoot(self, type_of_weapon, force, colour=BLUE):
         plan.update()
-        #v = self.get_force() / 12.5
-        v = 100
+        v = force/12.5
+        print(v)
         (x, y, t) = (0, 0, 0)
         snaryad = 0
         a = []
@@ -100,12 +100,16 @@ class Tank(tank.Tank):
             x = int(self.t[0] + x)
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
+                print(window.get_at([x, y]))
                 if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                     print(window.get_at((x, y)))
                     break
-                window.set_at((x, y), colour)
-                window.set_at((x+1, y), colour)
+                for i in range(5):
+                    window.set_at((x + i, y), colour)
                 a.append((x, y))
+                if snaryad > 10:
+                    for i in range(5):
+                        window.set_at((a[-10][0]+i, a[-10][1]), gs.backgroundColour)
                 if snaryad % 7 == 0:
                     pygame.display.update()
             t += 0.01
@@ -152,8 +156,9 @@ class Map:
                 window.set_at((x, y), gs.reliefColour)
 
     def update(self):
+        print('update')
         for x in range(gs.WIDTH):
             for y in range(gs.HEIGHT):
                 if window.get_at((x, y)) == BLUE:
-                    print(x,y)
+                    #print(x,y)
                     window.set_at((x, y), gs.backgroundColour)

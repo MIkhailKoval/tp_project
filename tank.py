@@ -8,7 +8,7 @@ class Tank(ABC):
     health = float()
 
     @abstractmethod
-    def getAngle(self) -> float:
+    def get_angle(self) -> float:
         pass
 
     @abstractmethod
