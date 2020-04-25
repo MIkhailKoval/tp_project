@@ -1,8 +1,13 @@
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 import math
+import weapon
+
 
 class Fighter(ABC):
-    currentWeapon = str()
+    weapons = {weapon.usualBomb: 100, weapon.bullet: 9999,
+               weapon.kiloton: 3, weapon.atomBomb: 1, weapon.laser: 0}
+    currentWeapon = weapon.usualBomb
     score = int()
     health = 1
     force = 100
@@ -16,19 +21,24 @@ class Fighter(ABC):
     def changeForce(self, delta):
         self.force = (self.force + 200 + delta) % 200
         print('force ', self.force)
-        
+
+    def chooseWeapon(self, newWeapon):
+        self.currentWeapon = newWeapon
+
     def shoot(self):
-        self.impl.shoot(self.currentWeapon, self.force)
+        if self.weapons[self.currentWeapon] > 0:
+            self.weapons[self.currentWeapon] -= 1
+            self.impl.shoot(self.currentWeapon, self.force)
 
     def isAlive(self):
         return self.health > 0
-    
+
     def get_force(self):
         return self.force
-    
-    def change_force(self, delta ):
-        self.force = (self.force + 200 + delta ) % 200
-        print('force ', self.force )
+
+    def change_force(self, delta):
+        self.force = (self.force + 200 + delta) % 200
+        print('force ', self.force)
 
     @abstractmethod
     def accept(self, visitor):

@@ -1,6 +1,7 @@
 #from __future__ import annotations
 from abc import ABC, abstractmethod
 import control
+import weapon
 import gamesettings as gs
 from fighter import Fighter
 import sys
@@ -25,9 +26,9 @@ class fightVisitor(Visitor):
         pass
 
     def movePlayer(self, player: 'Player'):
-        pygame.key.set_repeat(100, 1000 // gs.FPS)
+        pygame.key.set_repeat(200, 1000 // gs.FPS)
         while True:
-            event = pygame.event.poll()
+            event = pygame.event.wait()
             if event.type == QUIT:
                 # pylint: disable=no-member
                 pygame.quit()
@@ -54,6 +55,21 @@ class fightVisitor(Visitor):
                 if pressed_keys[control.reduceForce]:
                     player.changeForce(-1 - 4 * pressedCtrl)
                     print("DOWN")
+                if pressed_keys[control.chooseUsualBomb]:
+                    player.chooseWeapon(weapon.usualBomb)
+                    print("1")
+                if pressed_keys[control.chooseBullet]:
+                    player.chooseWeapon(weapon.bullet)
+                    print("2")
+                if pressed_keys[control.chooseKiloton]:
+                    player.chooseWeapon(weapon.kiloton)
+                    print("3")
+                if pressed_keys[control.chooseAtomBomb]:
+                    player.chooseWeapon(weapon.atomBomb)
+                    print("4")
+                if pressed_keys[control.chooseLaser]:
+                    player.chooseWeapon(weapon.laser)
+                    print("5", "no please")
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
                     player.shoot()
