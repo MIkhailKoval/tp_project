@@ -28,26 +28,24 @@ class main_window():
         pygame.display.update()
 
     def cycle(self):
-        clock = pygame.time.Clock()
         self.map = graphics.Map()
         graphics.plan = self.map
 
         fighters = fighterIterator.Fighters()
         for i in range(gs.numberOfFighters):
-            # здесь инициализация танков, определение их местоположения и первая отрисовка
             fighters.add(Player(graphics.Tank(i)))
         pygame.display.update()
 
         fighter = fighters.__iter__()
         visitor = fightVisitor()
 
-        while True:
-            for currentFighter in fighter:
-                currentFighter.accept(visitor)
-                clock.tick(gs.FPS)
+        for currentFighter in fighter:
+            currentFighter.accept(visitor)
+            clock.tick(gs.FPS/10)
         print('Win')
         sys.exit()
 
 
+clock = pygame.time.Clock()
 if __name__ == "__main__":
     main_window()

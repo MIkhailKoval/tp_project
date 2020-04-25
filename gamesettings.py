@@ -1,5 +1,4 @@
 numberOfFighters = 9
-isBot = (False, False)
 maxWind = 0
 existsReflection = False
 backgroundColour = (0, 255, 255)
@@ -9,3 +8,4 @@ WIDTH = 600
 HEIGHT = 400
 FPS = 60
 gunColour = (0, 0, 255)
+maxHealth = 1000

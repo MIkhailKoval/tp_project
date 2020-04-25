@@ -6,6 +6,7 @@ import pygame
 import gamesettings as gs
 import math
 import random
+from game import clock
 TYPE_OF_GRAPHICS = 0
 window = ''
 plan = ''
@@ -29,6 +30,7 @@ tanks = set()
 class Weapon(weapon.Weapon):
     pass
 
+
 class Tank(tank.Tank):
     def __init__(self, number):
         self.angle = math.pi / 2
@@ -36,7 +38,7 @@ class Tank(tank.Tank):
             0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
         self.t = (0, 0)
         self.colour = WHITE
-        self.health = 1000
+        self.health = gs.maxHealth
         self.draw_tank()
 
     def rotateMuzzle(self, angle):
@@ -48,7 +50,7 @@ class Tank(tank.Tank):
             self.angle = math.pi
         self.draw_muzzle()
 
-    def draw_tank(self, tank_colour = WHITE):
+    def draw_tank(self, tank_colour=WHITE):
         if not self in tanks:
             print('add')
             tanks.add(self)
@@ -74,7 +76,7 @@ class Tank(tank.Tank):
 
     def get_health(self):
         return self.health
-    
+
     def draw_muzzle(self, colour=BLACK):
         rd = 14
         x = rd * math.cos(self.angle)
@@ -83,7 +85,7 @@ class Tank(tank.Tank):
         pygame.draw.line(window, colour, t, (self.x, self.y - 10 - 2), 3)
         pygame.display.update()
 
-    def shoot(self, type_of_weapon, force, colour=BLUE):
+    def shoot(self, weapon, force, colour=BLUE):
         plan.update()
         v = force/12.5
         (x, y, t) = (0, 0, 0)
@@ -107,7 +109,7 @@ class Tank(tank.Tank):
             t += 0.01
         pygame.display.update()
         if x <= gs.WIDTH and x >= 0:
-            explosion(x, y, 30)
+            explosion(x, y, weapon.radius)
         plan.update()
         pygame.display.update()
 
