@@ -114,15 +114,16 @@ class Tank(tank.Tank):
         pygame.display.update()
 
 
-def explosion(x, y, r):
-    pygame.draw.circle(window, RED, (int(x), int(y)), int(r))
+def explosion(x, y, r, color = RED,  update = 1):
+    pygame.draw.circle(window, color, (int(x), int(y)), int(r))
     pygame.display.update()
-    pygame.time.wait(800)
+    pygame.time.wait(400)
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
     for tank in tanks:
         if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
             tank.set_health(1)      
-    updateTanks()
+    if update:
+        updateTanks()
     pygame.display.update()
 
 
@@ -131,6 +132,9 @@ def updateTanks():
         print(tank.health)
         if tank.health > 0:
             tank.draw_tank()
+        else:
+            tank.draw_muzzle(BLUE)
+            explosion( tank.x, tank.y - 12, 24, YELLOW, 0)
 
 
 class Info:
