@@ -90,7 +90,7 @@ class Tank(tank.Tank):
         pass
 
     def draw_muzzer(self, colour=BLACK):
-        print( self.angle)
+        print(self.angle)
         rd = 14
         x = rd * math.cos(self.angle)
         t = (self.x + x, - math.sqrt(rd * rd - (x) ** 2) + self.y - 10)
@@ -112,7 +112,7 @@ class Tank(tank.Tank):
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
                 if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
-                    print(window.get_at((x,y)))
+                    print(window.get_at((x, y)))
                     break
                 window.set_at((x, y), colour)
                 window.set_at((x+1, y), colour)
@@ -145,7 +145,6 @@ def updateTanks():
 class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
     pass
-
 
 
 class Map:

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class Fighter(ABC):
     currentWeapon = str()
     score = int()
-    health = float()
+    health = 1
     force = 100
 
     def __init__(self, impl):
@@ -14,10 +14,10 @@ class Fighter(ABC):
         currentAngle = self.impl.getAngle()
         self.impl.set_angle(currentAngle + angle)
 
-    def changeForce(self, delta ):
-        self.force = (self.force + 200 + delta ) % 200
-        print('force ', self.force )
-        
+    def changeForce(self, delta):
+        self.force = (self.force + 200 + delta) % 200
+        print('force ', self.force)
+
     def shoot(self):
         self.impl.shoot(self.currentWeapon, self.force)
 
