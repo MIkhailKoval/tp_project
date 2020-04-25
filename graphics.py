@@ -10,7 +10,7 @@ TYPE_OF_GRAPHICS = 0
 window = ''
 plan = ''
 # COLORS
-BLUE = (0, 0, 255)
+BLUE = (0, 0, 100, 255)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 LIGHT_BLUE = (0, 255, 255)
@@ -39,7 +39,6 @@ class Tank(tank.Tank):
         self.colour = WHITE
         self.health = 1000
         self.draw_tank()
-        #print(self.force)
 
     def rotateMuzzle(self, angle):
         self.draw_muzzle(gs.backgroundColour)
@@ -102,8 +101,8 @@ class Tank(tank.Tank):
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
                 if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
-                    pass
-                    #break
+                    print(window.get_at((x, y)))
+                    break
                 window.set_at((x, y), colour)
                 window.set_at((x+1, y), colour)
                 a.append((x, y))
@@ -156,4 +155,5 @@ class Map:
         for x in range(gs.WIDTH):
             for y in range(gs.HEIGHT):
                 if window.get_at((x, y)) == BLUE:
+                    print(x,y)
                     window.set_at((x, y), gs.backgroundColour)

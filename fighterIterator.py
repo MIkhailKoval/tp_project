@@ -1,11 +1,11 @@
-from __future__ import annotations
+#from __future__ import annotations
 from fighter import Fighter
 from collections.abc import Iterable, Iterator
 from typing import List
 
 
 class FighterIterator(Iterator):
-    def __init__(self, fighters: Fighters):
+    def __init__(self, fighters: 'Fighters'):
         self._all = fighters
         self._pos = 0
 
