@@ -111,6 +111,10 @@ class Tank(tank.Tank):
             explosion(x, y, weapon.radius)
         plan.update()
         pygame.display.update()
+        distances = []
+        for tank in tanks:
+            distances.append( (tank.x - x)**2 + (tank.y - y)**2)
+        return distances
 
 
 def explosion(x, y, r, color = RED,  update = 1):

@@ -29,6 +29,7 @@ class Fighter(ABC):
         if self.weapons[self.currentWeapon] > 0:
             self.weapons[self.currentWeapon] -= 1
             self.impl.shoot(self.currentWeapon, self.force)
+            
 
     def isAlive(self):
         return self.health > 0
