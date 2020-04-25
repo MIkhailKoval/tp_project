@@ -77,7 +77,7 @@ class Tank(tank.Tank):
 
     def get_health(self):
         pass
-
+    
     def draw_muzzle(self, colour=BLACK):
         rd = 14
         x = rd * math.cos(self.angle)
@@ -135,7 +135,6 @@ def updateTanks():
 class Info:
     '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
     pass
-
 
 
 class Map:

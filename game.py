@@ -20,7 +20,6 @@ class main_window():
         self.update()
         self.objects = []
         pygame.display.update()
-        pygame.key.set_repeat(100, 1000 // gs.FPS)
         self.cycle()
 
     def update(self):
@@ -30,23 +29,24 @@ class main_window():
 
     def cycle(self):
         clock = pygame.time.Clock()
+        self.map = graphics.Map()
+        graphics.plan = self.map
+
+        fighters = fighterIterator.Fighters()
+        for i in range(gs.numberOfFighters):
+            # здесь инициализация танков, определение их местоположения и первая отрисовка
+            fighters.add(Player(graphics.Tank(i)))
+        pygame.display.update()
+
+        fighter = fighters.__iter__()
+        visitor = fightVisitor()
+
         while True:
-            self.map = graphics.Map()
-            graphics.plan = self.map
-
-            fighters = fighterIterator.Fighters()
-            for i in range(gs.numberOfFighters):
-                # здесь инициализация танков, определение их местоположения и первая отрисовка
-                fighters.add(Player(graphics.Tank(i)))
-            pygame.display.update()
-
-            fighter = fighters.__iter__()
-            visitor = fightVisitor()
             for currentFighter in fighter:
                 currentFighter.accept(visitor)
                 clock.tick(gs.FPS)
-            print('Win')
-            sys.exit()
+        print('Win')
+        sys.exit()
 
 
 if __name__ == "__main__":
