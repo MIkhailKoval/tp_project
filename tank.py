@@ -16,13 +16,14 @@ class Tank(ABC):
         pass
 
     @abstractmethod
-    def setHealth(self, percent):
+    def set_health(self, percent):
         pass
 
     @abstractmethod
-    def getHealth(self) -> float:
+    def get_health(self) -> float:
         pass
 
     @abstractmethod
     def shoot(self, weapon, force):
         pass
+

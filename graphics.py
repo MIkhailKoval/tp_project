@@ -29,19 +29,6 @@ tanks = set()
 class Weapon(weapon.Weapon):
     pass
 
-
-def degrees(angleIndex):
-    def wrapper(func):
-        @functools.wraps(func)
-        def inner(*args, **kwargs):
-            args = list(args)
-            args[angleIndex - 1] *= math.pi / 180
-            args = tuple(args)
-            return func(*args, **kwargs)
-        return inner
-    return wrapper
-
-
 class Tank(tank.Tank):
     def __init__(self, number):
         self.angle = math.pi / 2
@@ -52,19 +39,21 @@ class Tank(tank.Tank):
         self.colour = WHITE
         self.health = 1000
         self.draw_tank()
+        #print(self.force)
 
-    @degrees(2)
     def rotateMuzzle(self, angle):
-        self.draw_muzzer(gs.backgroundColour)
-        self.angle += (3 * angle / (math.pi))
+        self.draw_muzzle(gs.backgroundColour)
+        self.angle += (angle)
+        print(angle)
         if self.angle > math.pi:
-            self.angle -= math.pi
+            self.angle = 0.0
         if self.angle < 0:
-            self.angle += math.pi
-        self.draw_muzzer()
+            self.angle = math.pi
+        self.draw_muzzle()
 
     def draw_tank(self):
         if not self in tanks:
+            print('add')
             tanks.add(self)
         r = 10
         x = -r * 10 - 1
@@ -73,24 +62,23 @@ class Tank(tank.Tank):
             t = (self.x - x / 10,  - math.sqrt(r * r - (x) ** 2 / 100) + self.y)
             pygame.draw.line(window, self.colour, t,
                              (self.x - x / 10, self.y), 2)
-        self.draw_muzzer()
+        self.draw_muzzle()
 
     def getAngle(self):
         return self.angle
 
     def set_angle(self, angle):
-        self.draw_muzzer(gs.backgroundColour)
+        self.draw_muzzle(gs.backgroundColour)
         self.rotateMuzzle(angle)
-        self.draw_muzzer()
+        self.draw_muzzle()
 
-    def setHealth(self, percent):
+    def set_health(self, percent):
         pass
 
-    def getHealth(self):
+    def get_health(self):
         pass
 
-    def draw_muzzer(self, colour=BLACK):
-        print( self.angle)
+    def draw_muzzle(self, colour=BLACK):
         rd = 14
         x = rd * math.cos(self.angle)
         t = (self.x + x, - math.sqrt(rd * rd - (x) ** 2) + self.y - 10)
@@ -100,20 +88,22 @@ class Tank(tank.Tank):
 
     def shoot(self, type_of_weapon, colour=BLUE):
         plan.update()
-        v = self.force / 12.5
+        #v = self.get_force() / 12.5
+        v = 100
         (x, y, t) = (0, 0, 0)
         snaryad = 0
         a = []
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t
             y = v * math.sin(self.angle) * t - t * t / 10
+            print(v)
             y = int(self.t[1] - y)
             x = int(self.t[0] + x)
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
                 if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
-                    print(window.get_at((x,y)))
-                    break
+                    pass
+                    #break
                 window.set_at((x, y), colour)
                 window.set_at((x+1, y), colour)
                 a.append((x, y))

@@ -38,18 +38,16 @@ class fightVisitor(Visitor):
             if pressedCtrl:
                 print("Ctrl")
             if pressed_keys[control.posRotate]:
-                player.rotate(
-                    1 + 4 * pressedCtrl)
+                player.rotate(1/180 + 4/180 * pressedCtrl)
                 print("RIGHT")
             if pressed_keys[control.negRotate]:
-                player.rotate(
-                    -1 - 4 * pressedCtrl)
+                player.rotate(-1/180 - 4/180 * pressedCtrl)
                 print("LEFT")
             if pressed_keys[control.boostForce]:
-                player.changeForce(1 + 4 * pressedCtrl)
+                player.change_force(1 + 4 * pressedCtrl)
                 print("UP")
             if pressed_keys[control.reduceForce]:
-                player.changeForce(-1 - 4 * pressedCtrl)
+                player.change_force(-1 - 4 * pressedCtrl)
                 print("DOWN")
             if pressed_keys[control.shoot]:
                 pygame.key.set_repeat(0, 0)
