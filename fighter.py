@@ -9,7 +9,7 @@ class Fighter(ABC):
                weapon.kiloton: 3, weapon.atomBomb: 1, weapon.laser: 0}
     currentWeapon = weapon.usualBomb
     score = int()
-    health = 1
+    health = 1000
     force = 100
 
     def __init__(self, impl):

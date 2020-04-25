@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 class Tank(ABC):
     angle = float()
     force = float()
-    health = float()
+    health = 1000
 
     @abstractmethod
     def get_angle(self) -> float:

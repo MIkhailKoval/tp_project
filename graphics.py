@@ -38,7 +38,6 @@ class Tank(tank.Tank):
             0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
         self.t = (0, 0)
         self.colour = WHITE
-        self.health = gs.maxHealth
         self.draw_tank()
 
     def rotateMuzzle(self, angle):
