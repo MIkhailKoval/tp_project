@@ -9,16 +9,18 @@ import graphics
 ACTIVE_FONT_COLOUR = (100, 0, 0)
 PASSIVE_FONT_COLOUR = (0, 100, 0)
 MENU_BACKGROUND_COLOUR = (200, 200, 200)
+SMALL_FONT = 36
+BIG_FONT = 48
 
 class menu_graphics:
     _font = property()
     def __init__(self, options: 'List[str]'):
-        #pygame.init()
+        pygame.init()
         graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         graphics.window.fill(MENU_BACKGROUND_COLOUR)
         pygame.display.update()
         self.buttons = dict()
-        self.p = len(self.buttons)
+        self.count = len(self.buttons)
     
     @_font.setter
     def _font(self, value):
@@ -26,14 +28,14 @@ class menu_graphics:
     
     @_font.getter
     def _font(self):
-        return pygame.font.Font(None, 36 * ( self.p >= 6) + 48 * (self.p < 6) )
+        return pygame.font.Font(None, SMALL_FONT * ( self.count >= 6) + BIG_FONT * (self.count < 6) )
     
     def redraw(self, options: 'List[str]'):
         graphics.window.fill(MENU_BACKGROUND_COLOUR)
         x = 30
-        self.p = len(options)
-        delta = ( 400 - (self.p < 6) * x * 2 - x ) / self.p * 0.5 
-        self.buttons = dict(zip( options,[(300, x + delta * (2 * y + 1) ) for y in range(0, self.p)]))
+        self.count = len(options)
+        delta = ( gs.HEIGHT - (self.count < 6) * x * 2 - x ) / self.count * 0.5 
+        self.buttons = dict(zip( options,[(300, x + delta * (2 * y + 1) ) for y in range(0, self.count)]))
         
         for key, value in self.buttons.items():
             text = self._font.render(key, 1, PASSIVE_FONT_COLOUR)
@@ -55,7 +57,7 @@ class menu_graphics:
         pygame.display.update()
 
 
-'''
+
 menu = menu_graphics('error')
 menu.redraw(['Проверка', 'Пссс', 'Hey'])
 menu.select('Проверка')
@@ -68,4 +70,3 @@ while True:
     if event.type == QUIT:
         pygame.quit()
         sys.exit()
-'''
