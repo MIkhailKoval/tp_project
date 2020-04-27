@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 import math
 import weapon
-
+import fighterIterator
 
 class Fighter(ABC):
     weapons = {weapon.usualBomb: 100, weapon.bullet: 9999,
@@ -28,10 +28,15 @@ class Fighter(ABC):
     def shoot(self):
         if self.weapons[self.currentWeapon] > 0:
             self.weapons[self.currentWeapon] -= 1
-            distances = self.impl.shoot(self.currentWeapon, self.force)
-            '''
-            ...tap your code here...
-            '''              
+            healthes = self.impl.shoot(self.currentWeapon, self.force)
+            iter = fighterIterator.Fighters().__iter__()
+            i = 0
+            for x in iter:
+                if i == len(healthes): 
+                    break
+                x.health = healthes[i]
+                i += 1
+                print( x.health)
 
     def isAlive(self):
         return self.health > 0

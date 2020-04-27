@@ -113,7 +113,8 @@ class Tank(tank.Tank):
         pygame.display.update()
         distances = []
         for tank in tanks:
-            distances.append( (tank.x - x)**2 + (tank.y - y)**2)
+            #distances.append( (tank.x - x)**2 + (tank.y - y)**2)
+            distances.append( tank.health )
         return distances
 
 
