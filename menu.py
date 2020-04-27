@@ -1,18 +1,82 @@
-from state import State, Game
+from state import State, Game, Context
 from abc import ABC, abstractmethod
 from menu import menu_graphics
+import main_menu
+import pause_menu
 import pygame
+from pygame import (
+    QUIT, KEYDOWN
+)
+from pygame.key import(
+    K_UP, K_DOWN, K_RETURN
+)
 import sys
 
 
-class Menu(State, ABC):
-    options: 'List[str]'
+class Menu(State):
+    def handle(self):
+        pygame.key.set_repeat(0, 0)
+        pygame.event.set_allowed(QUIT, KEYDOWN)
+        if self.context.info == "Main_menu":
+            menucontext = Menu_context(
+                self.context, main_menu.Main_menu_selected_new_game())
+        elif self.context.info == "Pause_menu":
+            menucontext = Menu_context(
+                self.context, pause_menu.Pause_menu_selected_return())
+        menucontext.work()
 
-    def __init__(self):
-        pass
+
+class Menu_context(ABC):
+    _menu: 'Menu_base'
+    _graphics: 'menu_graphics'
+
+    def __init__(self, game_context: 'Context', menu: 'Menu_base', option: str = _menu.options[0]):
+        _graphics = menu_graphics(self._menu.options)
+        self._game_context = game_context
+        self.go_to_menu(menu)
+        self.reselect(option)
+
+    def reselect(self, option: 'str'):
+        self._graphics.deselect(self._menu._selected)
+        self._menu._selected = option
+        self._menu.menu_context = self
+        self._graphics.select(self._menu._selected)
+
+    def go_to_menu(self, menu: 'Menu_base'):
+        self._menu = menu
+        self._menu.menu_context = self
+        self._graphics.redraw(self._menu.options)
+
+    def work(self):
+        self._menu.handle()
+
+
+class Menu_base(ABC):
+    options: 'List[str]'
+    _selected: 'str'
+    _menu_context: 'Menu_context'
+
+    @property
+    def menu_context(self):
+        return self._menu_context
+
+    @menu_context.setter
+    def menu_context(self, menu_context: 'Menu_context'):
+        self._menu_context = menu_context
 
     def handle(self):
-        menu_graphics(self.options)
+        pygame.event.wait()
+        if pygame.event.type == QUIT:
+            self.quit()
+        elif pygame.event.type == KEYDOWN:
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[K_UP]:
+                self.go_up()
+            elif pressed_keys[K_DOWN]:
+                self.go_down()
+            elif pressed_keys[K_RETURN]:
+                self.enter()
+        self.menu_context.work()
 
     @abstractmethod
     def enter(self):
@@ -31,17 +95,3 @@ class Menu(State, ABC):
         pygame.quit()
         # pylint: enable=no-member
         sys.exit()
-
-
-class MainMenu(Menu, ABC):
-    def handle(self):
-        print("MainMenu handles request")
-        print("MainMenu wants to change the state of the context.")
-        self.context.transition_to(Game())
-
-
-class PauseMenu(Menu, ABC):
-    def handle(self):
-        print("PauseMenu handles request")
-        print("PauseMenu wants to change the state of the context.")
-        self.context.transition_to(Game())
