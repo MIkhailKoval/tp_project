@@ -1,6 +1,6 @@
-from graphics import window
 import gamesettings as gs
 import pygame
+import sys
 from pygame.constants import (
     QUIT, KEYDOWN
 )
@@ -15,7 +15,7 @@ BIG_FONT = 48
 class menu_graphics:
     _font = property()
     def __init__(self, options: 'List[str]'):
-        pygame.init()
+        #pygame.init()
         graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         graphics.window.fill(MENU_BACKGROUND_COLOUR)
         pygame.display.update()
@@ -57,7 +57,7 @@ class menu_graphics:
         pygame.display.update()
 
 
-
+'''
 menu = menu_graphics('error')
 menu.redraw(['Проверка', 'Пссс', 'Hey'])
 menu.select('Проверка')
@@ -70,3 +70,4 @@ while True:
     if event.type == QUIT:
         pygame.quit()
         sys.exit()
+'''

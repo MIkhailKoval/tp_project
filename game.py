@@ -1,13 +1,10 @@
-import control
-import fighterIterator
-import gamesettings
 import gamesettings as gs
 import graphics
-from visitor import Player, fightVisitor
-import tank
 import pygame
 import sys
 from numpy import math
+import state
+from menu import Menu
 
 
 class main_window():
@@ -16,12 +13,15 @@ class main_window():
         pygame.init()
         graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         pygame.draw.rect(
-            graphics.window, gamesettings.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
+            graphics.window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         self.objects = []
         pygame.display.update()
         # pylint: disable=no-member
-        self.cycle()
+        self.context = state.Context(Menu())  
+        self.context.info = 'Main_menu'
+        self.context.request()
 
+'''
     def cycle(self):
         self.map = graphics.Map()
         graphics.plan = self.map
@@ -39,7 +39,7 @@ class main_window():
             clock.tick(gs.FPS/10)
         print('Win')
         sys.exit()
-
+'''
 
 clock = pygame.time.Clock()
 if __name__ == "__main__":

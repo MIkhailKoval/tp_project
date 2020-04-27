@@ -1,8 +1,7 @@
-from state import State, Game, Context
+from state import State, Context
 from abc import ABC, abstractmethod
-from menu import menu_graphics
-import main_menu
-import pause_menu
+from main_menu import Main_menu_selected_new_game
+from pause_menu import Pause_menu_selected_return
 import pygame
 from pygame import (
     QUIT, KEYDOWN
@@ -11,6 +10,8 @@ from pygame.key import(
     K_UP, K_DOWN, K_RETURN
 )
 import sys
+from menu_graphics import menu_graphics
+from state_game import Game
 
 
 class Menu(State):
@@ -19,10 +20,10 @@ class Menu(State):
         pygame.event.set_allowed(QUIT, KEYDOWN)
         if self.context.info == "Main_menu":
             menucontext = Menu_context(
-                self.context, main_menu.Main_menu_selected_new_game())
+                self.context, Main_menu_selected_new_game())
         elif self.context.info == "Pause_menu":
             menucontext = Menu_context(
-                self.context, pause_menu.Pause_menu_selected_return())
+                self.context, Pause_menu_selected_return())
         menucontext.work()
 
 

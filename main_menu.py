@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from menu import Menu_base
-from state import Game
+from state_game import Game
 
 
 class Main_menu(Menu_base):
