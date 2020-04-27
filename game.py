@@ -17,15 +17,11 @@ class main_window():
         pygame.init()
         # pylint: enable=no-member
         graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
-        self.update()
+        pygame.draw.rect(
+            graphics.window, gamesettings.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         self.objects = []
         pygame.display.update()
         self.cycle()
-
-    def update(self):
-        pygame.draw.rect(
-            graphics.window, gamesettings.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
-        pygame.display.update()
 
     def cycle(self):
         self.map = graphics.Map()

@@ -1,14 +1,70 @@
-class menu_graphics:
-    def __init__(self, options: 'List[str]'):
-        # первая отрисовка экрана меню
-        pass
+from graphics import window
+import gamesettings as gs
+import pygame
+from pygame.constants import (
+    QUIT, KEYDOWN
+)
+import graphics
+ACTIVE_FONT_COLOUR = (100, 0, 0)
+PASSIVE_FONT_COLOUR = (0, 100, 0)
+MENU_BACKGROUND_COLOUR = (200, 200, 200)
 
+class menu_graphics:
+    _font = property()
+    def __init__(self, options: 'List[str]'):
+        #pygame.init()
+        graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
+        graphics.window.fill(MENU_BACKGROUND_COLOUR)
+        pygame.display.update()
+        self.buttons = dict()
+        self.p = len(self.buttons)
+    
+    @_font.setter
+    def _font(self, value):
+        _font = value
+    
+    @_font.getter
+    def _font(self):
+        return pygame.font.Font(None, 36 * ( self.p >= 6) + 48 * (self.p < 6) )
+    
     def redraw(self, options: 'List[str]'):
-        # перерисовка меню с новыми пунктами (вызывается при переходе из одного меню в другое)
-        pass
+        graphics.window.fill(MENU_BACKGROUND_COLOUR)
+        x = 30
+        self.p = len(options)
+        delta = ( 400 - (self.p < 6) * x * 2 - x ) / self.p * 0.5 
+        self.buttons = dict(zip( options,[(300, x + delta * (2 * y + 1) ) for y in range(0, self.p)]))
+        
+        for key, value in self.buttons.items():
+            text = self._font.render(key, 1, PASSIVE_FONT_COLOUR)
+            place = text.get_rect(center= value)
+            graphics.window.blit(text, place)
+        pygame.display.update()
 
     def select(self, name: str):
-        pass
+        text = self._font.render(name, 1, ACTIVE_FONT_COLOUR)
+        place = text.get_rect(center= self.buttons[name])
+        graphics.window.blit(text, place)
+        pygame.display.update()
 
     def deselect(self, name: str):
-        pass
+        text = self._font.render(name, 1, PASSIVE_FONT_COLOUR)
+        place = text.get_rect(center= self.buttons[name])
+        graphics.window.blit(text, place)
+        pygame.time.wait(600)
+        pygame.display.update()
+
+
+'''
+menu = menu_graphics('error')
+menu.redraw(['Проверка', 'Пссс', 'Hey'])
+menu.select('Проверка')
+menu.deselect('Проверка')
+menu.select('Пссс')
+menu.deselect('Пссс')
+menu.select('Hey')
+while True:
+    event = pygame.event.wait()
+    if event.type == QUIT:
+        pygame.quit()
+        sys.exit()
+'''
