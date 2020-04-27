@@ -1,4 +1,3 @@
-#from __future__ import annotations
 from fighter import Fighter
 from collections.abc import Iterable, Iterator
 from typing import List

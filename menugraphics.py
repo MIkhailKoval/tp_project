@@ -5,6 +5,7 @@ from pygame.constants import (
     QUIT, KEYDOWN
 )
 import graphics
+
 ACTIVE_FONT_COLOUR = (100, 0, 0)
 PASSIVE_FONT_COLOUR = (0, 100, 0)
 MENU_BACKGROUND_COLOUR = (200, 200, 200)

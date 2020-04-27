@@ -1,5 +1,4 @@
 import tank
-import environment
 import functools
 import weapon
 import pygame
@@ -7,9 +6,10 @@ import gamesettings as gs
 import math
 import random
 from game import clock
-TYPE_OF_GRAPHICS = 0
-window = ''
-plan = ''
+window = None
+plan = None
+tanks = set()
+
 # COLORS
 BLUE = (0, 0, 100, 255)
 RED = (255, 0, 0)
@@ -22,9 +22,6 @@ YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
 MAX_FORCE = 200
 MIN_FORCE = 1
-
-
-tanks = set()
 
 
 class Weapon(weapon.Weapon):

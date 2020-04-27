@@ -1,5 +1,4 @@
 import control
-import environment
 import fighterIterator
 import gamesettings
 import gamesettings as gs
@@ -15,12 +14,12 @@ class main_window():
     def __init__(self):
         # pylint: disable=no-member
         pygame.init()
-        # pylint: enable=no-member
         graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         pygame.draw.rect(
             graphics.window, gamesettings.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         self.objects = []
         pygame.display.update()
+        # pylint: disable=no-member
         self.cycle()
 
     def cycle(self):
@@ -45,3 +44,4 @@ class main_window():
 clock = pygame.time.Clock()
 if __name__ == "__main__":
     main_window()
+    # pylint: disable=no-member
