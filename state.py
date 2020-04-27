@@ -1,9 +1,14 @@
 from abc import ABC, abstractmethod
-from menu import Menu
+import menu
+import pygame
+from pygame.constants import (
+    QUIT, KEYDOWN
+)
 
 
 class Context(ABC):
     _state = None
+    info = str()
 
     def __init__(self, state: 'State') -> None:
         self.transition_to(state)
@@ -38,12 +43,6 @@ class State(ABC):
 class Game(State):
     def handle(self):
         print("Game handles request.")
+        pygame.event.set_allowed(QUIT, KEYDOWN)
         print("Game wants to change the state of the context.")
-        self.context.transition_to(Menu())
-
-
-if __name__ == "__main__":
-
-    context = Context(Game())
-    context.request1()
-    context.request2()
+        self.context.transition_to(menu.Menu())
