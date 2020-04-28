@@ -33,7 +33,6 @@ def PrtScr():
 
 class Tank(tank.Tank):
     def __init__(self, number):
-        self.angle = math.pi / 2
         self.x, self.y = plan.getCoord(
             0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
         self.t = (0, 0)
@@ -86,7 +85,7 @@ class Tank(tank.Tank):
 
     def shoot(self, weapon, force, colour=BLUE):
         plan.update()
-        v = force/12.5
+        v = force / 5.5
         (x, y, t) = (0, 0, 0)
         snaryad = 0
         a = []

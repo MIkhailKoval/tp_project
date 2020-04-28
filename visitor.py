@@ -44,13 +44,13 @@ class fightVisitor(Visitor):
                     print("Ctrl")
                 if pressed_keys[pygame.K_ESCAPE]:
                     return "Menu"
-                if pressed_keys[control.posRotate]:
-                    player.rotate(
-                        1/180 + 4/180 * pressedCtrl)
-                    print("RIGHT")
                 if pressed_keys[control.negRotate]:
                     player.rotate(
                         -1/180 - 4/180 * pressedCtrl)
+                    print("RIGHT")
+                if pressed_keys[control.posRotate]:
+                    player.rotate(
+                        +1/180 + 4/180 * pressedCtrl)
                     print("LEFT")
                 if pressed_keys[control.boostForce]:
                     player.changeForce(1 + 4 * pressedCtrl)

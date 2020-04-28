@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 import weapon
-
+import math
 
 class Tank(ABC):
-    angle = float()
+    angle = math.pi / 2
     force = float()
     health = 1000
 
