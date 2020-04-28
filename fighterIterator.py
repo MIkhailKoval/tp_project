@@ -1,5 +1,5 @@
-from fighter import Fighter
 from collections.abc import Iterable, Iterator
+import fighter
 from typing import List
 
 
@@ -8,7 +8,7 @@ class FighterIterator(Iterator):
         self._all = fighters
         self._pos = 0
 
-    def __next__(self) -> Fighter:
+    def __next__(self) -> fighter.Fighter:
         current = self._pos
         self._pos += 1
         while not self._all[self._pos % len(self._all)].isAlive():
@@ -20,11 +20,11 @@ class FighterIterator(Iterator):
 
 
 class Fighters(Iterable):
-    def __init__(self, fighters: List[Fighter] = []):
+    def __init__(self, fighters: List[fighter.Fighter] = []):
         self._all = fighters
 
     def __iter__(self) -> FighterIterator:
         return FighterIterator(self._all)
 
-    def add(self, fighter: Fighter):
+    def add(self, fighter: fighter.Fighter):
         self._all.append(fighter)

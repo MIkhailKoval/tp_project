@@ -1,11 +1,10 @@
-import tank
 import functools
-import weapon
-import pygame
 import gamesettings as gs
 import math
+import pygame
 import random
-from game import clock
+import tank
+import weapon
 window = None
 plan = None
 tanks = set()
@@ -111,31 +110,31 @@ class Tank(tank.Tank):
         distances = []
         for tank in tanks:
             #distances.append( (tank.x - x)**2 + (tank.y - y)**2)
-            distances.append( tank.health )
+            distances.append(tank.health)
         return distances
 
 
-def explosion(x, y, r, color = RED,  update = 1):
+def explosion(x, y, r, color=RED,  update=1):
     pygame.draw.circle(window, color, (int(x), int(y)), int(r))
     pygame.display.update()
     pygame.time.wait(400)
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
     for tank in tanks:
         if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
-            tank.set_health(1)      
+            tank.set_health(1)
     if update:
         updateTanks()
     pygame.display.update()
 
 
 def updateTanks():
-    for tank in tanks: 
+    for tank in tanks:
         print(tank.health)
         if tank.health > 0:
             tank.draw_tank()
         else:
             tank.draw_muzzle(BLUE)
-            explosion( tank.x, tank.y - 12, 24, YELLOW, 0)
+            explosion(tank.x, tank.y - 12, 24, YELLOW, 0)
 
 
 class Info:
@@ -148,6 +147,8 @@ class Map:
         self.reflection = random.randint(0, gs.existsReflection)
         self.wind = random.randint(0, gs.maxWind)
         self.draw_relief()
+        global plan
+        plan = self
 
     def getCoord(self, t):
         return [t, t*(t - 100)*(t - gs.WIDTH)*(t - gs.HEIGHT) / 20000000 + 210]

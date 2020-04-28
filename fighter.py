@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from collections import OrderedDict
+import fighterIterator
 import math
 import weapon
-import fighterIterator
+
 
 class Fighter(ABC):
     weapons = {weapon.usualBomb: 100, weapon.bullet: 9999,
@@ -32,11 +33,11 @@ class Fighter(ABC):
             iter = fighterIterator.Fighters().__iter__()
             i = 0
             for x in iter:
-                if i == len(healthes): 
+                if i == len(healthes):
                     break
                 x.health = healthes[i]
                 i += 1
-                print( x.health)
+                print(x.health)
 
     def isAlive(self):
         return self.health > 0

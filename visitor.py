@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 import control
-import weapon
-import gamesettings as gs
 from fighter import Fighter
-import sys
+import gamesettings as gs
 from pygame.constants import (
     QUIT, KEYDOWN
 )
 import pygame
+import sys
+import weapon
 
 
 class Visitor(ABC):

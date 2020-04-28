@@ -1,25 +1,25 @@
 import gamesettings as gs
 import graphics
-import pygame
-import sys
 from numpy import math
-import state
-from menu import Menu
+import pygame
+from state import Context, Menu
+import sys
 
 
 class main_window():
     def __init__(self):
         # pylint: disable=no-member
         pygame.init()
-        graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
+        window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         pygame.draw.rect(
-            graphics.window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
+            window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         self.objects = []
         pygame.display.update()
         # pylint: disable=no-member
-        self.context = state.Context(Menu())  
+        self.context = Context(Menu())
         self.context.info = 'Main_menu'
         self.context.request()
+
 
 '''
     def cycle(self):

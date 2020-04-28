@@ -1,5 +1,5 @@
-import weapon
 from abc import ABC, abstractmethod
+import weapon
 
 
 class Tank(ABC):
@@ -26,4 +26,3 @@ class Tank(ABC):
     @abstractmethod
     def shoot(self, weapon, force):
         pass
-
