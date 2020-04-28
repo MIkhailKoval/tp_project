@@ -1,4 +1,4 @@
-from __future__ import annotations
+#from __future__ import annotations
 from menu_graphics import menu_graphics
 from abc import ABC, abstractmethod
 import fighterIterator
@@ -52,6 +52,7 @@ class Game(State):
         self.context.transition_to(Menu())
 
     def cycle(self):
+        print('I\'m here')
         self.map = Map()
 
         fighters = fighterIterator.Fighters()
