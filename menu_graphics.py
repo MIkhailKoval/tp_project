@@ -56,7 +56,7 @@ class menu_graphics:
         text = self._font.render(name, 1, PASSIVE_FONT_COLOUR)
         place = text.get_rect(center=self.buttons[name])
         graphics.window.blit(text, place)
-        pygame.time.wait(600)
+        pygame.time.wait(200)
         pygame.display.update()
 
 
