@@ -18,7 +18,7 @@ class menu_graphics:
 
     def __init__(self, options: 'List[str]'):
         # pygame.init()
-        graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
+        #graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         graphics.window.fill(MENU_BACKGROUND_COLOUR)
         pygame.display.update()
         self.buttons = dict()
@@ -59,18 +59,3 @@ class menu_graphics:
         pygame.time.wait(200)
         pygame.display.update()
 
-
-'''
-menu = menu_graphics('error')
-menu.redraw(['Проверка', 'Пссс', 'Hey'])
-menu.select('Проверка')
-menu.deselect('Проверка')
-menu.select('Пссс')
-menu.deselect('Пссс')
-menu.select('Hey')
-while True:
-    event = pygame.event.wait()
-    if event.type == QUIT:
-        pygame.quit()
-        sys.exit()
-'''

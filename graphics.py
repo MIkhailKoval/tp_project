@@ -26,7 +26,6 @@ MIN_FORCE = 1
 def init_window():
     global window
     window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
-    pygame.draw.rect(window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
     pygame.display.update()
 
 
@@ -91,7 +90,7 @@ class Tank(tank.Tank):
         a = []
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t
-            y = v * math.sin(self.angle) * t - t * t / 10
+            y = v * math.sin(self.angle) * t - t * t / 2
             y = int(self.t[1] - y)
             x = int(self.t[0] + x)
             snaryad += 1
@@ -106,14 +105,14 @@ class Tank(tank.Tank):
                     pygame.display.update()
             t += 0.01
         pygame.display.update()
+        distances = []
         if x <= gs.WIDTH and x >= 0:
-            explosion(x, y, weapon.radius)
+            distances = explosion(x, y, weapon.radius)
         plan.update()
         pygame.display.update()
-        distances = []
-        for tank in tanks:
-            #distances.append( (tank.x - x)**2 + (tank.y - y)**2)
-            distances.append(tank.health)
+        #for tank in tanks:
+        #distances.append( (tank.x - x)**2 + (tank.y - y)**2)
+        #distances.append(tank.health)
         return distances
 
 
@@ -122,12 +121,15 @@ def explosion(x, y, r, color=RED,  update=1):
     pygame.display.update()
     pygame.time.wait(400)
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
+    distances = []
     for tank in tanks:
-        if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
-            tank.set_health(1)
-    if update:
-        updateTanks()
+        distances.append( (tank.x - x)**2 + (tank.y - y)**2)
+        #if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
+            #tank.set_health(1)
+    #if update:
+    #    updateTanks()
     pygame.display.update()
+    return distances
 
 
 def updateTanks():
@@ -149,6 +151,7 @@ class Map:
     def __init__(self, ):
         self.reflection = random.randint(0, gs.existsReflection)
         self.wind = random.randint(0, gs.maxWind)
+        pygame.draw.rect(window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
         self.draw_relief()
         global plan
         plan = self

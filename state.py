@@ -59,11 +59,12 @@ class Cycle:
             while True:
                 info = currentFighter.accept(self.visitor)
                 if info == "Menu":
-                    yield "PauseMenu"
+                    print('Pause')
+                    yield "Pause_menu"
                 else:
                     break
         print('Win')
-        return "MainMenu"
+        return "Main_menu"
 
 
 class Game(State):
@@ -73,14 +74,22 @@ class Game(State):
         if self.context.info == "New":
             self._cycle = Cycle()
             self._cycle_gen = self._cycle.loop()
-
+        elif self.context.info == "Continue":
+            self._cycle = Cycle()
+            self._cycle_gen = self._cycle.loop()
         menu = next(self._cycle_gen)
-        if menu == "PauseMenu":
+        print("Pause_menu")
+        if menu == "Pause_menu":
+            '''
+            получить матрицу экрана.
+            '''
+            self.context.info = "Pause_menu"
             self.context.game = self
-            self.context.transition_to(Pause_menu_selected_return())
+            self.context.transition_to(Menu())
         else:
+            self.context.info = "Main_menu"
             self.context.game = None
-            self.context.transition_to(Main_menu_selected_new_game())
+            self.context.transition_to(Menu())
         print("Game wants to change the state of the context.")
 
 
@@ -88,6 +97,7 @@ class Menu(State):
     def handle(self):
         pygame.key.set_repeat(0, 0)
         pygame.event.set_allowed([QUIT, KEYDOWN])
+        print(self.context.info == "Pause_menu", self.context.info)
         if self.context.info == "Main_menu":
             menucontext = Menu_context(
                 self.context, Main_menu_selected_new_game())
@@ -121,7 +131,7 @@ class Menu_context(ABC):
         self._graphics.redraw(self._menu.options)
 
     def work(self):
-        self._menu.handle()
+        self._menu.accept()
 
 
 class Menu_base(ABC):
@@ -137,7 +147,8 @@ class Menu_base(ABC):
     def menu_context(self, menu_context: 'Menu_context'):
         self._menu_context = menu_context
 
-    def handle(self):
+    def accept(self):
+        print('Я не туда захожу')
         self._go_to_game = False
         event = pygame.event.wait()
         print("event")

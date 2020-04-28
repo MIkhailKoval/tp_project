@@ -29,15 +29,15 @@ class Fighter(ABC):
     def shoot(self):
         if self.weapons[self.currentWeapon] > 0:
             self.weapons[self.currentWeapon] -= 1
-            healthes = self.impl.shoot(self.currentWeapon, self.force)
-            iter = fighterIterator.Fighters().__iter__()
+            distances = self.impl.shoot(self.currentWeapon, self.force)
+            '''iter = fighterIterator.Fighters().__iter__()
             i = 0
             for x in iter:
                 if i == len(healthes):
                     break
                 x.health = healthes[i]
                 i += 1
-                print(x.health)
+                print(x.health)'''
 
     def isAlive(self):
         return self.health > 0
