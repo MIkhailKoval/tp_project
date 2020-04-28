@@ -23,8 +23,11 @@ MAX_FORCE = 200
 MIN_FORCE = 1
 
 
-class Weapon(weapon.Weapon):
-    pass
+def init_window():
+    global window
+    window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
+    pygame.draw.rect(window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
+    pygame.display.update()
 
 
 class Tank(tank.Tank):
@@ -143,7 +146,7 @@ class Info:
 
 
 class Map:
-    def __init__(self):
+    def __init__(self, ):
         self.reflection = random.randint(0, gs.existsReflection)
         self.wind = random.randint(0, gs.maxWind)
         self.draw_relief()

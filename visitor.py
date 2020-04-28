@@ -21,6 +21,8 @@ class Visitor(ABC):
 
 
 class fightVisitor(Visitor):
+    info = str()
+
     def __init__(self):
         pass
 
@@ -40,6 +42,8 @@ class fightVisitor(Visitor):
                     pressed_mod_keys & control.boostMove)
                 if pressedCtrl:
                     print("Ctrl")
+                if pressed_keys[pygame.K_ESCAPE]:
+                    yield "Menu"
                 if pressed_keys[control.posRotate]:
                     player.rotate(
                         1/180 + 4/180 * pressedCtrl)
@@ -73,7 +77,7 @@ class fightVisitor(Visitor):
                     pygame.key.set_repeat(0, 0)
                     player.shoot()
                     print("ENTER")
-                    return
+                    return "Shoot"
 
     def moveBot(self):
         pass
@@ -81,4 +85,4 @@ class fightVisitor(Visitor):
 
 class Player(Fighter):
     def accept(self, visitor: 'Visitor'):
-        visitor.movePlayer(self)
+        return visitor.movePlayer(self)

@@ -2,7 +2,7 @@ import gamesettings as gs
 import graphics
 from numpy import math
 import pygame
-from state import Context, Menu
+from state import Context, Menu, Game
 import sys
 
 
@@ -10,15 +10,21 @@ class main_window():
     def __init__(self):
         # pylint: disable=no-member
         pygame.init()
-        window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
-        pygame.draw.rect(
-            window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
-        self.objects = []
-        pygame.display.update()
         # pylint: disable=no-member
+        graphics.init_window()
+        self.objects = []
+
         self.context = Context(Menu())
         self.context.info = 'Main_menu'
-        self.context.request()
+        self.context.game = None
+
+        '''
+        self.context = Context(Game())
+        self.context.info = "New"
+        '''
+        while True:
+            print("----------REQUEST------------")
+            self.context.request()
 
 
 '''

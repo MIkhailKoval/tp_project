@@ -43,29 +43,45 @@ class State(ABC):
         pass
 
 
+class Cycle:
+    def __init__(self):
+        self.map = Map()
+        self.fighters = fighterIterator.Fighters()
+        for i in range(gs.numberOfFighters):
+            self.fighters.add(Player(Tank(i)))
+        pygame.display.update()
+
+        self.fighter = self.fighters.__iter__()
+        self.visitor = fightVisitor()
+
+    def loop(self) -> str:
+        for currentFighter in self.fighter:
+            while True:
+                info = currentFighter.accept(self.visitor)
+                if info == "Menu":
+                    yield "PauseMenu"
+                else:
+                    break
+        print('Win')
+        return "MainMenu"
+
+
 class Game(State):
     def handle(self):
         print("Game handles request.")
         pygame.event.set_allowed([QUIT, KEYDOWN])
-        self.cycle()
+        if self.context.info == "New":
+            self._cycle = Cycle()
+            self._cycle_gen = self._cycle.loop()
+
+        menu = next(self._cycle_gen)
+        if menu == "PauseMenu":
+            self.context.game = self
+            self.context.transition_to(Pause_menu_selected_return())
+        else:
+            self.context.game = None
+            self.context.transition_to(Main_menu_selected_new_game())
         print("Game wants to change the state of the context.")
-        self.context.transition_to(Menu())
-
-    def cycle(self):
-        self.map = Map()
-
-        fighters = fighterIterator.Fighters()
-        for i in range(gs.numberOfFighters):
-            fighters.add(Player(Tank(i)))
-        pygame.display.update()
-
-        fighter = fighters.__iter__()
-        visitor = fightVisitor()
-
-        for currentFighter in fighter:
-            currentFighter.accept(visitor)
-        print('Win')
-        sys.exit()
 
 
 class Menu(State):
@@ -122,6 +138,7 @@ class Menu_base(ABC):
         self._menu_context = menu_context
 
     def handle(self):
+        self._go_to_game = False
         event = pygame.event.wait()
         print("event")
         if event.type == QUIT:
@@ -133,11 +150,13 @@ class Menu_base(ABC):
             elif pressed_keys[pygame.K_DOWN]:
                 self.go_down()
             elif pressed_keys[pygame.K_RETURN]:
-                self.enter()
+                if self.enter():
+                    print("Return")
+                    return
         self.menu_context.work()
 
     @abstractmethod
-    def enter(self):
+    def enter(self) -> bool:
         pass
 
     @abstractmethod
@@ -165,6 +184,7 @@ class Main_menu_selected_new_game(Main_menu):
     def enter(self):
         self.menu_context._game_context.info = "New"
         self.menu_context._game_context.transition_to(Game())
+        return True
 
     def go_up(self):
         pass
@@ -177,7 +197,7 @@ class Main_menu_selected_settings(Main_menu):
     _selected = "Settings"
 
     def enter(self):
-        pass
+        return False
 
     def go_up(self):
         self.menu_context.reselect(Main_menu_selected_new_game())
@@ -191,6 +211,7 @@ class Main_menu_selected_quit(Main_menu):
 
     def enter(self):
         self.quit()
+        return True
 
     def go_up(self):
         self.menu_context.reselect(Main_menu_selected_settings())
@@ -208,7 +229,9 @@ class Pause_menu_selected_return(Pause_menu):
 
     def enter(self):
         self.menu_context._game_context.info = "Continue"
-        self.menu_context._game_context.transition_to(Game())
+        self.menu_context._game_context.transition_to(
+            self.menu_context._game_context.game)
+        return True
 
     def go_up(self):
         pass
@@ -222,6 +245,8 @@ class Pause_menu_selected_main_menu(Pause_menu):
 
     def enter(self):
         self.menu_context.go_to_menu(Main_menu_selected_new_game())
+        self.menu_context._game_context.game = None
+        return False
 
     def go_up(self):
         self.menu_context.reselect(Pause_menu_selected_return())
@@ -235,6 +260,7 @@ class Pause_menu_selected_quit(Pause_menu):
 
     def enter(self):
         self.quit()
+        return True
 
     def go_up(self):
         self.menu_context.reselect(Pause_menu_selected_main_menu)
