@@ -31,6 +31,11 @@ def init_window():
 def PrtScr():
     return [ [ window.get_at(x, y) for y in range(gs.HEIGHT)] for x in range(gs.WIDTH) ] 
 
+def show_current_state(matrix):
+    for x in range( gs.WIDTH):
+        for y in range( gs.HEIGHT):
+            window.set_at(x, y, matrix[x][y])
+            
 class Tank(tank.Tank):
     def __init__(self, number):
         self.x, self.y = plan.getCoord(
