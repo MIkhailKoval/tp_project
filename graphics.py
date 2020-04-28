@@ -28,6 +28,8 @@ def init_window():
     window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
     pygame.display.update()
 
+def PrtScr():
+    return [ [ window.get_at(x, y) for y in range(gs.HEIGHT)] for x in range(gs.WIDTH) ] 
 
 class Tank(tank.Tank):
     def __init__(self, number):
