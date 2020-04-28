@@ -22,9 +22,13 @@ GREEN = (0, 255, 0)
 MAX_FORCE = 200
 MIN_FORCE = 1
 
+def new_game():
+    global tanks
+    tanks = set()
 
 def init_window():
     global window
+    new_game()
     window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
     pygame.display.update()
 
@@ -35,16 +39,20 @@ def show_current_state(matrix):
     for x in range( gs.WIDTH):
         for y in range( gs.HEIGHT):
             window.set_at(x, y, matrix[x][y])
-            
+
 class Tank(tank.Tank):
     def __init__(self, number):
         self.x, self.y = plan.getCoord(
             0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
         self.t = (0, 0)
         self.colour = WHITE
+        self.draw_muzzle(gs.backgroundColour)
+        self.angle = math.pi / 2
         self.draw_tank()
+        print(len(tanks))
 
     def rotateMuzzle(self, angle):
+        print(self.angle, angle)
         self.draw_muzzle(gs.backgroundColour)
         self.angle += (angle)
         if self.angle > math.pi:
@@ -116,9 +124,6 @@ class Tank(tank.Tank):
             distances = explosion(x, y, weapon.radius)
         plan.update()
         pygame.display.update()
-        #for tank in tanks:
-        #distances.append( (tank.x - x)**2 + (tank.y - y)**2)
-        #distances.append(tank.health)
         return distances
 
 
