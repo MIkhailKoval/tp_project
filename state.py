@@ -1,4 +1,4 @@
-from __future__ import annotations
+#from __future__ import annotations
 from menu_graphics import menu_graphics
 from abc import ABC, abstractmethod
 import fighterIterator
