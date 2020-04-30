@@ -4,6 +4,8 @@ import fighterIterator
 import math
 import weapon
 
+MAX_FORCE = 200
+MIN_FORCE = 1
 
 class Fighter(ABC):
     weapons = {weapon.usualBomb: 100, weapon.bullet: 9999,
@@ -20,7 +22,12 @@ class Fighter(ABC):
         self.impl.set_angle(angle * math.pi)
 
     def changeForce(self, delta):
-        self.force = (self.force + 200 + delta) % 200
+        if self.force + delta >= MAX_FORCE:
+            self.force = MAX_FORCE
+        elif self.force + delta <= MIN_FORCE:
+            self.force = MIN_FORCE
+        else:
+            self.force += delta
         print('force ', self.force)
 
     def chooseWeapon(self, newWeapon):

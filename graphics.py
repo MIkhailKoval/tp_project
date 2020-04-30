@@ -7,7 +7,7 @@ import tank
 import weapon
 window = None
 plan = None
-tanks = set()
+tanks = None
 
 # COLORS
 BLUE = (0, 0, 100, 255)
@@ -19,8 +19,7 @@ PINK = (255, 100, 180)
 ORANGE = (255, 100, 10)
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
-MAX_FORCE = 200
-MIN_FORCE = 1
+
 
 def new_game():
     global tanks
@@ -135,8 +134,13 @@ def explosion(x, y, r, color=RED,  update=1):
     distances = []
     for tank in tanks:
         distances.append( (tank.x - x)**2 + (tank.y - y)**2)
-        #if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
-            #tank.set_health(1)
+        if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
+            old_health = tank.health
+            tank.set_health(1)
+            if tank.health <= 0 and old_health > 0:
+                tank.draw_muzzle(BLUE)
+                explosion(tank.x, tank.y - 12, 24, YELLOW, 0)
+
     #if update:
     #    updateTanks()
     pygame.display.update()
@@ -168,7 +172,7 @@ class Map:
         plan = self
 
     def getCoord(self, t):
-        return [t, t*(t - 100)*(t - gs.WIDTH)*(t - gs.HEIGHT) / 20000000 + 210]
+        return [t, t * (t - 100)*(t - gs.WIDTH)*(t - gs.HEIGHT) / 20000000 + 210]
 
     def draw_relief(self):
         points = [self.getCoord(x) for x in range(gs.WIDTH)]
