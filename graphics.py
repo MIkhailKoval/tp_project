@@ -89,13 +89,12 @@ class Tank(tank.Tank):
 
     def shoot(self, game, weapon, force, colour=BLUE):
         game.map.update()
-        v = force / 5.5 * 2.5
+        v = force / 5.5 * 2
         (x, y, t) = (0, 0, 0)
         clock = pygame.time.Clock()
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t
-            y = v * math.sin(self.angle) * t - 5 * t * t
-
+            y = v * math.sin(self.angle) * t -  5 * t * t 
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:

@@ -12,6 +12,6 @@ choose_usual_bomb = pygame.K_1
 choose_bullet = pygame.K_2
 choose_kiloton = pygame.K_3
 choose_atom_bomb = pygame.K_4
-#chooseLaser = pygame.K_5
+#choose_laser = pygame.K_5
 
 # pylint: enable=no-member

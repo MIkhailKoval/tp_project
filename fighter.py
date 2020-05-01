@@ -9,7 +9,7 @@ MIN_FORCE = 10
 class Fighter(ABC):
     weapons = {weapon.usual_bomb: 100, weapon.bullet: 9999,
                weapon.kiloton: 3, weapon.atom_bomb: 1, weapon.laser: 0}
-    current_weapon = weapon.Usual_bomb
+    current_weapon = weapon.usual_bomb
     score = int()
     health = 100
     force = 100
