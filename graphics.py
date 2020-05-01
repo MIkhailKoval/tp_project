@@ -20,12 +20,14 @@ ORANGE = (255, 100, 10)
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
 # tank
-TANK_RADIUS = 10 
+TANK_RADIUS = 10
 MUZZLE_LENGTH = 14
+
 
 def new_game():
     global tanks
     tanks = set()
+
 
 def init_window():
     global window
@@ -33,18 +35,22 @@ def init_window():
     window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
     pygame.display.update()
 
+
 def PrtScr():
-    return [ [ window.get_at((x, y)) for y in range(gs.HEIGHT)] for x in range(gs.WIDTH) ] 
+    return [[window.get_at((x, y)) for y in range(gs.HEIGHT)]
+            for x in range(gs.WIDTH)]
+
 
 def show_current_state(matrix):
-    for x in range( gs.WIDTH):
-        for y in range( gs.HEIGHT):
+    for x in range(gs.WIDTH):
+        for y in range(gs.HEIGHT):
             window.set_at((x, y), matrix[x][y])
+
 
 class Tank(tank.Tank):
     def __init__(self, number):
-        self.x, self.y = plan.getCoord(
-            0.1 * gs.WIDTH + 0.8 * gs.WIDTH / (gs.numberOfFighters - 1) * number)
+        self.x, self.y = plan.getCoord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
+                                       (gs.numberOfFighters - 1) * number)
         self.muzzle_coord = (self.x + TANK_RADIUS, self.y + MUZZLE_LENGTH)
         self.colour = WHITE
         self.draw_muzzle(gs.backgroundColour)
@@ -65,16 +71,16 @@ class Tank(tank.Tank):
     def draw_tank(self, tank_colour=WHITE):
         #global tanks
         if not self in tanks:
-            #if len(tanks) >= gs.numberOfFighters: 
+            #if len(tanks) >= gs.numberOfFighters:
             #tanks = set()
             print('add')
             tanks.add(self)
         x = -TANK_RADIUS * 10 - 1
         while x < TANK_RADIUS * 10:
             x += 1
-            t = (self.x - x / 10,  - math.sqrt(TANK_RADIUS * TANK_RADIUS - (x) ** 2 / 100) + self.y)
-            pygame.draw.line(window, self.colour, t,
-                             (self.x - x / 10, self.y), 2)
+            t = (self.x - x / 10,
+                 -math.sqrt(TANK_RADIUS * TANK_RADIUS - (x)**2 / 100) + self.y)
+            pygame.draw.line(window, self.colour, t, (self.x - x / 10, self.y), 2)
         self.draw_muzzle()
 
     def get_angle(self):
@@ -93,24 +99,28 @@ class Tank(tank.Tank):
 
     def draw_muzzle(self, colour=BLACK):
         x = MUZZLE_LENGTH * math.cos(self.angle)
-        self.muzzle_coord = (self.x + x, - math.sqrt(MUZZLE_LENGTH * MUZZLE_LENGTH - (x) ** 2) + self.y - 10)
-        pygame.draw.line(window, colour, self.muzzle_coord, (self.x, self.y - 10 - 2), 3)
+        self.muzzle_coord = (
+            self.x + x,
+            -math.sqrt(MUZZLE_LENGTH * MUZZLE_LENGTH - (x)**2) + self.y - 10)
+        pygame.draw.line(window, colour, self.muzzle_coord,
+                         (self.x, self.y - 10 - 2), 3)
         pygame.display.update()
 
     def shoot(self, weapon, force, colour=BLUE):
         plan.update()
-        v = force / 5.5
+        v = force
         (x, y, t) = (0, 0, 0)
         snaryad = 0
         a = []
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
-            x = v * math.cos(self.angle) * t
-            y = v * math.sin(self.angle) * t - t * t / 2
+            x = v * math.cos(self.angle) * t / 5.5
+            y = v * math.sin(self.angle) * t / 5.5 - t * t / 2
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
-                if window.get_at((x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
+                if window.get_at(
+                    (x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                     break
                 a.append((x, y))
                 for i in range(3):
@@ -128,7 +138,7 @@ class Tank(tank.Tank):
         return distances
 
 
-def explosion(x, y, r, color=RED, update = 1):
+def explosion(x, y, r, color=RED):
     pygame.display.update()
     pygame.draw.circle(window, color, (int(x), int(y)), int(r))
     pygame.display.update()
@@ -136,13 +146,14 @@ def explosion(x, y, r, color=RED, update = 1):
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
     distances = []
     for tank in tanks:
-        distances.append( (tank.x - x)**2 + (tank.y - y)**2)
+        distances.append((tank.x - x)**2 + (tank.y - y)**2)
         if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
             old_health = tank.health
             tank.set_health(gs.maxHealth / 2)
             if tank.health <= 0 and old_health > 0:
                 tank.draw_muzzle(BLUE)
-                explosion(tank.x, tank.y - 14, TANK_RADIUS + MUZZLE_LENGTH, YELLOW)
+                explosion(tank.x, tank.y - MUZZLE_LENGTH,
+                          TANK_RADIUS + MUZZLE_LENGTH, YELLOW)
     updateTanks()
     pygame.display.update()
     return distances
@@ -161,16 +172,20 @@ class Info:
 
 
 class Map:
-    def __init__(self, ):
+    def __init__(self):
         self.reflection = random.randint(0, gs.existsReflection)
         self.wind = random.randint(0, gs.maxWind)
-        pygame.draw.rect(window, gs.backgroundColour, (0, 0, gs.WIDTH, gs.HEIGHT))
+        pygame.draw.rect(window, gs.backgroundColour,
+                         (0, 0, gs.WIDTH, gs.HEIGHT))
         self.draw_relief()
         global plan
         plan = self
 
     def getCoord(self, x):
-        return [x, x * (x - 100)*(x - gs.WIDTH)*(x - gs.HEIGHT) / 20000000 + 210]
+        return [
+            x,
+            x * (x - 100) * (x - gs.WIDTH) * (x - gs.HEIGHT) / 20000000 + 210
+        ]
 
     def draw_relief(self):
         points = [self.getCoord(x) for x in range(gs.WIDTH)]

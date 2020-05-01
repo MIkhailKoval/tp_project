@@ -16,7 +16,8 @@ class Visitor(ABC):
         pass
 
     @abstractmethod
-    def moveBot(self):  # у функции планируется другая сигнатура (как у movePlayer)
+    def moveBot(self):  
+    # у функции планируется другая сигнатура (как у movePlayer)
         pass
 
 

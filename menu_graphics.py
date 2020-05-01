@@ -12,6 +12,8 @@ MENU_BACKGROUND_COLOUR = (200, 200, 200)
 SMALL_FONT = 36
 BIG_FONT = 48
 
+# Настройки меню:
+WORD_LENGTH = 300
 
 class menu_graphics:
     _font = property()
@@ -36,7 +38,7 @@ class menu_graphics:
         self.count = len(options)
         delta = (gs.HEIGHT - (self.count < 6) * x * 2 - x) / self.count * 0.5
         self.buttons = dict(
-            zip(options, [(300, x + delta * (2 * y + 1)) for y in range(0, self.count)]))
+            zip(options, [(WORD_LENGTH, x + delta * (2 * y + 1)) for y in range(0, self.count)]))
 
         for key, value in self.buttons.items():
             text = self._font.render(key, 1, PASSIVE_FONT_COLOUR)
