@@ -14,7 +14,7 @@ class UsualBomb(Weapon):
 class Bullet(Weapon):
     radius = 1
     damage = int(0.25 * maxHealth)
-
+    
 
 class Kiloton(Weapon):
     radius = 70

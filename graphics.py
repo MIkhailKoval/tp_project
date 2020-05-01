@@ -17,7 +17,8 @@ PINK = (255, 100, 180)
 ORANGE = (255, 100, 10)
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
-# tank
+
+# TANKS
 TANK_RADIUS = 10
 MUZZLE_LENGTH = 14
 
@@ -81,25 +82,23 @@ class Tank(tank.Tank):
         x = MUZZLE_LENGTH * math.cos(self.angle)
         self.muzzle_coord = (
             self.x + x,
-            -math.sqrt(MUZZLE_LENGTH * MUZZLE_LENGTH - (x)**2) + self.y - 10)
+            -math.sqrt(MUZZLE_LENGTH * MUZZLE_LENGTH - (x)**2) + self.y - TANK_RADIUS)
         pygame.draw.line(window, colour, self.muzzle_coord,
                          (self.x, self.y - MUZZLE_LENGTH), 3)
         pygame.display.update()
 
     def shoot(self, game, weapon, force, colour=BLUE):
         game.map.update()
-        v = force / 5.5 * 2
+        v = force / 5.5 * 2.5
         (x, y, t) = (0, 0, 0)
-        snaryad = 0
         clock = pygame.time.Clock()
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t 
             y = v * math.sin(self.angle) * t -  5 * t * t
-
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
-            snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
+                print(x, y)
                 if window.get_at(
                         (x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                     break
@@ -132,7 +131,8 @@ def explosion(fighters, x, y, r, color=RED):
         distances.append(pow((tank.x - x)**2 + (tank.y - y)**2, 0.5))
     updateTanks(fighters)
     show_force(color)
-    show_angle(color)
+    show_angle(tank)
+    show_type_of_weapon(color)
     pygame.display.update()
     return distances
 
@@ -144,7 +144,7 @@ def updateTanks(fighters):
 
 
 def show_force(player):
-    pygame.draw.rect(window, gs.reliefColour, (500, 340, gs.WIDTH, 20))
+    pygame.draw.rect(window, gs.reliefColour, (gs.WIDTH - 100, 340, 100, 20))
     if not hasattr(player, 'force'):
         return
     _font = pygame.font.Font(None, 18)
@@ -154,7 +154,27 @@ def show_force(player):
     window.blit(text, place)
     pygame.display.update()
 
-
+def show_type_of_weapon(player):
+    pygame.draw.rect(window, gs.reliefColour, (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40 ))
+    if not hasattr(player, 'currentWeapon'):
+        return
+    _font = pygame.font.Font(None, 18)
+    lst = str(type(player.currentWeapon))
+    text = _font.render('Weapon:{}'.format(str(lst[15:-2])), 1, (100, 0, 0))
+    place = text.get_rect(center=(440, 375))
+    window.blit(text, place)
+    pygame.display.update()
+'''
+def show_health(player):
+    pygame.draw.rect(window, PINK, (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40 ))
+    if not hasattr(player, 'health'):
+        return
+    _font = pygame.font.Font(None, 18)
+    text = _font.render('Health:{}'.format(str(player.health)), 1, (100, 0, 0))
+    place = text.get_rect(center=(420, 370))
+    window.blit(text, place)
+    pygame.display.update()
+'''
 def show_angle(tank):
     pygame.draw.rect(window, gs.reliefColour,
                      (500, 360, gs.WIDTH - 500, gs.HEIGHT - 360))

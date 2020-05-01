@@ -35,6 +35,8 @@ class fightVisitor(Visitor):
         # здесь надо, чтобы отсеялись лишние
         player.impl.draw_tank(graphics.PINK)
         graphics.show_force(player)
+        graphics.show_angle(player.impl)
+        graphics.show_type_of_weapon(player)
         print('HERE')
         while True:
             event = pygame.event.wait()
@@ -73,18 +75,22 @@ class fightVisitor(Visitor):
                 if pressed_keys[control.chooseUsualBomb]:
                     print("1")
                     player.chooseWeapon(weapon.usualBomb)
+                    graphics.show_type_of_weapon(player)
                 if pressed_keys[control.chooseBullet]:
                     print("2")
                     player.chooseWeapon(weapon.bullet)
+                    graphics.show_type_of_weapon(player)
                 if pressed_keys[control.chooseKiloton]:
                     print("3")
                     player.chooseWeapon(weapon.kiloton)
+                    graphics.show_type_of_weapon(player)
                 if pressed_keys[control.chooseAtomBomb]:
                     print("4")
                     player.chooseWeapon(weapon.atomBomb)
-                if pressed_keys[control.chooseLaser]:
+                    graphics.show_type_of_weapon(player)
+                '''if pressed_keys[control.chooseLaser]:
                     player.chooseWeapon(weapon.laser)
-                    print("5", "no please")
+                    print("5", "no please")'''
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
                     print("ENTER")

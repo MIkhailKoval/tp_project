@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 import math
 import weapon
-
 MAX_FORCE = 200
 MIN_FORCE = 1
 
