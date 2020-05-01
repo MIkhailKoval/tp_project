@@ -17,8 +17,6 @@ class menu_graphics:
     _font = property()
 
     def __init__(self, options: 'List[str]'):
-        # pygame.init()
-        #graphics.window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
         graphics.window.fill(MENU_BACKGROUND_COLOUR)
         pygame.display.update()
         self.buttons = dict()

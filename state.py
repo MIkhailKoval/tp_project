@@ -1,9 +1,8 @@
-#from __future__ import annotations
 from menu_graphics import menu_graphics
 from abc import ABC, abstractmethod
 import fighterIterator
 import gamesettings as gs
-from graphics import Tank, Map
+from graphics import Tank, Map, PrtScr
 from pygame import (
     QUIT, KEYDOWN
 )
@@ -80,9 +79,8 @@ class Game(State):
         menu = next(self._cycle_gen)
         print("Pause_menu")
         if menu == "Pause_menu":
-            '''
-            получить матрицу экрана.
-            '''
+            self.context._screen = PrtScr()
+            #print(self.context._screen)
             self.context.info = "Pause_menu"
             self.context.game = self
             self.context.transition_to(Menu())
@@ -148,7 +146,6 @@ class Menu_base(ABC):
         self._menu_context = menu_context
 
     def accept(self):
-        print('Я не туда захожу')
         self._go_to_game = False
         event = pygame.event.wait()
         print("event")
