@@ -8,7 +8,6 @@ import weapon
 window = None
 plan = None
 tanks = None
-
 # COLORS
 BLUE = (0, 0, 100, 255)
 RED = (255, 0, 0)
@@ -52,7 +51,6 @@ class Tank(tank.Tank):
         self.x, self.y = plan.getCoord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
                                        (gs.numberOfFighters - 1) * number)
         self.muzzle_coord = (self.x + TANK_RADIUS, self.y + MUZZLE_LENGTH)
-        self.colour = WHITE
         self.draw_muzzle(gs.backgroundColour)
         self.angle = math.pi / 2
         self.draw_tank()
@@ -68,19 +66,20 @@ class Tank(tank.Tank):
             self.angle = math.pi
         self.draw_muzzle()
 
+
     def draw_tank(self, tank_colour=WHITE):
-        #global tanks
+        global tanks
+        i = 1
         if not self in tanks:
-            #if len(tanks) >= gs.numberOfFighters:
-            #tanks = set()
-            print('add')
+            print('add', i)
+            i += 1
             tanks.add(self)
         x = -TANK_RADIUS * 10 - 1
         while x < TANK_RADIUS * 10:
             x += 1
             t = (self.x - x / 10,
                  -math.sqrt(TANK_RADIUS * TANK_RADIUS - (x)**2 / 100) + self.y)
-            pygame.draw.line(window, self.colour, t, (self.x - x / 10, self.y), 2)
+            pygame.draw.line(window, tank_colour, t, (self.x - x / 10, self.y), 2)
         self.draw_muzzle()
 
     def get_angle(self):
@@ -89,13 +88,11 @@ class Tank(tank.Tank):
     def set_angle(self, angle):
         self.draw_muzzle(gs.backgroundColour)
         self.rotateMuzzle(angle)
+        show_angle(self)
         self.draw_muzzle()
 
     def set_health(self, delta):
         self.health -= delta
-
-    def get_health(self):
-        return self.health
 
     def draw_muzzle(self, colour=BLACK):
         x = MUZZLE_LENGTH * math.cos(self.angle)
@@ -103,7 +100,7 @@ class Tank(tank.Tank):
             self.x + x,
             -math.sqrt(MUZZLE_LENGTH * MUZZLE_LENGTH - (x)**2) + self.y - 10)
         pygame.draw.line(window, colour, self.muzzle_coord,
-                         (self.x, self.y - 10 - 2), 3)
+                         (self.x, self.y - MUZZLE_LENGTH), 3)
         pygame.display.update()
 
     def shoot(self, weapon, force, colour=BLUE):
@@ -128,6 +125,7 @@ class Tank(tank.Tank):
                 a.append((x, y))
                 if snaryad % 7 == 0:
                     pygame.display.update()
+            # ну нельзя же все числа заменить на константы!(Это просто время в нашей системе отсчета)
             t += 0.01
         pygame.display.update()
         distances = []
@@ -155,6 +153,8 @@ def explosion(x, y, r, color=RED):
                 explosion(tank.x, tank.y - MUZZLE_LENGTH,
                           TANK_RADIUS + MUZZLE_LENGTH, YELLOW)
     updateTanks()
+    show_force(color)
+    show_angle(color)
     pygame.display.update()
     return distances
 
@@ -165,10 +165,29 @@ def updateTanks():
         if tank.health > 0:
             tank.draw_tank()
 
+def show_force(player):
+    pygame.draw.rect(window, gs.reliefColour, (500, 340, gs.WIDTH, 20))
+    if not hasattr(player, 'force'):
+        return
+    _font = pygame.font.Font(None, 18)
+    print(player.force)
+    text = _font.render('Force:{}'.format(str(player.force)), 1, (100, 0, 0))
+    place = text.get_rect(center=(550, 350))
+    window.blit(text, place)
+    pygame.display.update()
 
-class Info:
-    '''класс для отображения на экране разной инфы по типу того, чей ход, какой ветер'''
-    pass
+
+def show_angle(tank):
+    pygame.draw.rect(window, gs.reliefColour, (500, 360, gs.WIDTH - 500, gs.HEIGHT - 360))
+    if not hasattr(tank, 'angle'):
+        return
+    _font = pygame.font.Font(None, 18)
+    print(tank.angle)
+    angle = int(tank.angle / math.pi * 180 )
+    text = _font.render('Angle:{}'.format(str(angle)), 1, (100, 0, 0))
+    place = text.get_rect(center=(550, 375))
+    window.blit(text, place)
+    pygame.display.update()
 
 
 class Map:

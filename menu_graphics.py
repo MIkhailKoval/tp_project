@@ -14,7 +14,7 @@ BIG_FONT = 48
 
 # Настройки меню:
 WORD_LENGTH = 300
-
+COUNT_FOR_SMALL_FONT = 6
 class menu_graphics:
     _font = property()
 
@@ -30,7 +30,7 @@ class menu_graphics:
 
     @_font.getter
     def _font(self):
-        return pygame.font.Font(None, SMALL_FONT * (self.count >= 6) + BIG_FONT * (self.count < 6))
+        return pygame.font.Font(None, SMALL_FONT * (self.count >= COUNT_FOR_SMALL_FONT) + BIG_FONT * (self.count < COUNT_FOR_SMALL_FONT))
 
     def redraw(self, options: 'List[str]'):
         graphics.window.fill(MENU_BACKGROUND_COLOUR)

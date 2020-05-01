@@ -6,6 +6,7 @@ reliefColour = (0, 255, 0)
 # PARAMETERS
 WIDTH = 600
 HEIGHT = 400
+FOR_INFO = 100
 FPS = 60
 gunColour = (0, 0, 255)
 maxHealth = 1000

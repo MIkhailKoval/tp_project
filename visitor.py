@@ -8,7 +8,7 @@ from pygame.constants import (
 import pygame
 import sys
 import weapon
-
+import graphics 
 
 class Visitor(ABC):
     @abstractmethod
@@ -29,6 +29,10 @@ class fightVisitor(Visitor):
 
     def movePlayer(self, player: 'Player'):
         pygame.key.set_repeat(200, 1000 // gs.FPS)
+        # здесь надо, чтобы отсеялись лишние
+        player.impl.draw_tank(graphics.PINK)
+        graphics.show_force(player)
+        print('HERE')
         while True:
             event = pygame.event.wait()
             if event.type == QUIT:
@@ -49,16 +53,20 @@ class fightVisitor(Visitor):
                     player.rotate(
                         -1/180 - 4/180 * pressedCtrl)
                     print("RIGHT")
+                    #graphics.show_force(player)
                 if pressed_keys[control.posRotate]:
                     player.rotate(
                         +1/180 + 4/180 * pressedCtrl)
                     print("LEFT")
+                    #graphics.show_force(player)
                 if pressed_keys[control.boostForce]:
                     player.changeForce(1 + 4 * pressedCtrl)
                     print("UP")
+                    graphics.show_force(player)
                 if pressed_keys[control.reduceForce]:
                     player.changeForce(-1 - 4 * pressedCtrl)
                     print("DOWN")
+                    graphics.show_force(player)
                 if pressed_keys[control.chooseUsualBomb]:
                     player.chooseWeapon(weapon.usualBomb)
                     print("1")
