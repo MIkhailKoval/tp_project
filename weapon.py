@@ -1,4 +1,4 @@
-from gamesettings import maxHealth
+from gamesettings import max_health
 
 
 class Weapon:
@@ -6,24 +6,24 @@ class Weapon:
     radius = 0
 
 
-class UsualBomb(Weapon):
+class Usual_bomb(Weapon):
     radius = 30
-    damage = maxHealth
+    damage = max_health
 
 
 class Bullet(Weapon):
     radius = 1
-    damage = int(0.25 * maxHealth)
+    damage = int(0.25 * max_health)
     
 
 class Kiloton(Weapon):
     radius = 70
-    damage = maxHealth
+    damage = max_health
 
 
-class AtomBomb(Weapon):
+class Atom_bomb(Weapon):
     radius = 120
-    damage = maxHealth
+    damage = max_health
 
 
 class Laser(Weapon):
@@ -31,8 +31,8 @@ class Laser(Weapon):
     gravitation = False
 
 
-usualBomb = UsualBomb()
+usual_bomb = Usual_bomb()
 bullet = Bullet()
 kiloton = Kiloton()
-atomBomb = AtomBomb()
+atom_bomb = Atom_bomb()
 laser = Laser()

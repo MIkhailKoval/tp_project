@@ -7,7 +7,7 @@ from pygame import (
 )
 import pygame
 import sys
-from visitor import fightVisitor, Player
+from visitor import Fight_visitor, Player
 
 
 class Context(ABC):
@@ -45,12 +45,11 @@ class Game(State):
     def __init__(self):
         self.map = graphics.Map()
         self.fighters = []
-        self.alive_tanks = gs.numberOfFighters
-        for i in range(gs.numberOfFighters):
+        self.alive_tanks = gs.number_of_fighters
+        for i in range(gs.number_of_fighters):
             self.fighters.append(Player(graphics.Tank(self, i)))
         pygame.display.update()
-
-        self.visitor = fightVisitor()
+        self.visitor = Fight_visitor()
 
     def loop(self) -> str:
         while self.alive_tanks > 1:
@@ -62,7 +61,7 @@ class Game(State):
                         yield "Pause_menu"
                     else:
                         break
-            print('Win')
+            print(self.alive_tanks)
         return "Main_menu"
 
     def handle(self):
@@ -75,10 +74,9 @@ class Game(State):
         self.stop_case = next(self._loop)
         print(self.stop_case)
         if self.stop_case == "Pause_menu":
-            # print(self.context._screen)
             self.context.info = "Pause_menu"
             self.context.game = self
-            self.context.game._screen = graphics.PrtScr()
+            self.context.game._screen = graphics.prt_scr()
             self.context.transition_to(Menu())
         else:
             self.context.info = "Main_menu"
@@ -180,7 +178,7 @@ class Menu_base(ABC):
 
 
 class Main_menu(Menu_base):
-    options = ["New game", "Settings", "Quit"]
+    options = ["New game", "Settings (in the works)", "Quit"]
 
 
 class Main_menu_selected_new_game(Main_menu):
@@ -199,7 +197,7 @@ class Main_menu_selected_new_game(Main_menu):
 
 
 class Main_menu_selected_settings(Main_menu):
-    _selected = "Settings"
+    _selected = "Settings (in the works)"
 
     def enter(self):
         return False

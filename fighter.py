@@ -3,13 +3,13 @@ from collections import OrderedDict
 import math
 import weapon
 MAX_FORCE = 200
-MIN_FORCE = 1
+MIN_FORCE = 10
 
 
 class Fighter(ABC):
-    weapons = {weapon.usualBomb: 100, weapon.bullet: 9999,
-               weapon.kiloton: 3, weapon.atomBomb: 1, weapon.laser: 0}
-    currentWeapon = weapon.usualBomb
+    weapons = {weapon.usual_bomb: 100, weapon.bullet: 9999,
+               weapon.kiloton: 3, weapon.atom_bomb: 1, weapon.laser: 0}
+    current_weapon = weapon.Usual_bomb
     score = int()
     health = 100
     force = 100
@@ -20,43 +20,38 @@ class Fighter(ABC):
     def rotate(self, angle: int):
         self.impl.set_angle(angle * math.pi)
 
-    def changeForce(self, delta):
-        if self.force + delta >= MAX_FORCE:
-            self.force = MAX_FORCE
-        elif self.force + delta <= MIN_FORCE:
-            self.force = MIN_FORCE
-        else:
-            self.force += delta
+    def change_force(self, delta):
+        self.force = max(MIN_FORCE, min(MAX_FORCE, self.force + delta))
         print('force ', self.force)
 
-    def chooseWeapon(self, newWeapon):
-        self.currentWeapon = newWeapon
+    def choose_weapon(self, new_weapon):
+        self.current_weapon = new_weapon
 
     def shoot(self, game):
-        if self.weapons[self.currentWeapon] > 0:
-            self.weapons[self.currentWeapon] -= 1
-            distances = self.impl.shoot(game, self.currentWeapon, self.force)
+        if self.weapons[self.current_weapon] > 0:
+            self.weapons[self.current_weapon] -= 1
+            distances = self.impl.shoot(game, self.current_weapon, self.force)
             handle_explosion(game.fighters, distances,
-                             self.currentWeapon.radius, self.currentWeapon.damage, game.alive_tanks)
+                             self.current_weapon.radius, self.current_weapon.damage, game.alive_tanks)
+            return True
+        else:
+            return False
 
-    def reduceHealth(self, delta, fighters, alive_tanks):
+    def reduce_health(self, delta, fighters, alive_tanks):
         if self.health > 0:
             self.health -= delta
             if self.health <= 0:
                 distances = self.impl.detonate(fighters)
+                print(alive_tanks)
                 alive_tanks -= 1
                 handle_explosion(
-                    fighters, distances, weapon.usualBomb.radius, weapon.usualBomb.damage, alive_tanks)
+                    fighters, distances, weapon.usual_bomb.radius, weapon.usual_bomb.damage, alive_tanks)
 
-    def isAlive(self):
+    def is_alive(self):
         return self.health > 0
 
     def get_force(self):
         return self.force
-
-    def change_force(self, delta):
-        self.force = (self.force + 200 + delta) % 200
-        print('force ', self.force)
 
     @abstractmethod
     def accept(self, visitor):
@@ -67,4 +62,4 @@ def handle_explosion(fighters, distances, radius, damage, alive_tanks):
     for i in range(len(distances)):
         print(i, radius, distances[i])
         if radius >= distances[i]:
-            fighters[i].reduceHealth(damage, fighters, alive_tanks)
+            fighters[i].reduce_health(damage, fighters, alive_tanks)

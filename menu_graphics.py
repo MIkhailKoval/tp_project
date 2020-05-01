@@ -36,7 +36,7 @@ class menu_graphics:
         graphics.window.fill(MENU_BACKGROUND_COLOUR)
         x = 30
         self.count = len(options)
-        delta = (gs.HEIGHT - (self.count < 6) * x * 2 - x) / self.count * 0.5
+        delta = (gs.HEIGHT - (self.count < COUNT_FOR_SMALL_FONT) * x * 2 - x) / self.count * 0.5
         self.buttons = dict(
             zip(options, [(WORD_LENGTH, x + delta * (2 * y + 1)) for y in range(0, self.count)]))
 
