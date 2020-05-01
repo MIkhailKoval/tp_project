@@ -70,13 +70,15 @@ class Game(State):
         pygame.event.set_allowed([QUIT, KEYDOWN])
         if self.context.info == "New":
             self._loop = self.loop()
+        else:
+            graphics.show_current_state(self.context.game._screen)
         self.stop_case = next(self._loop)
         print(self.stop_case)
         if self.stop_case == "Pause_menu":
-            self.context._screen = graphics.PrtScr()
             # print(self.context._screen)
             self.context.info = "Pause_menu"
             self.context.game = self
+            self.context.game._screen = graphics.PrtScr()
             self.context.transition_to(Menu())
         else:
             self.context.info = "Main_menu"
