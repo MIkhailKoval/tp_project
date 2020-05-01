@@ -123,6 +123,7 @@ class Menu_context(ABC):
         self._menu = menu
         self._menu.menu_context = self
         self._graphics.redraw(self._menu.options)
+        self._graphics.select(self._menu._selected)
 
     def work(self):
         self._menu.accept()
