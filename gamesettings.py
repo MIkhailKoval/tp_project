@@ -1,4 +1,4 @@
-number_of_fighters = 4
+number_of_fighters = 6
 max_wind = 0
 exists_reflection = False
 background_colour = (0, 255, 255)

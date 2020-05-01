@@ -18,7 +18,8 @@ class Bullet(Weapon):
 
 class Kiloton(Weapon):
     radius = 70
-    damage = max_health * 0.7
+    damage = 0.7 * max_health
+
 
 
 class Atom_bomb(Weapon):

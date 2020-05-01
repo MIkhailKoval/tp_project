@@ -18,7 +18,7 @@ class Context(ABC):
         self.transition_to(state)
 
     def transition_to(self, state: 'State'):
-        print(f"Context: Transition to {type(state).__name__}")
+       # print(f"Context: Transition to {type(state).__name__}")
         self._state = state
         self._state.context = self
 
@@ -57,22 +57,26 @@ class Game(State):
                 while True:
                     info = current_fighter.accept(self, self.visitor)
                     if info == "Menu":
-                        print('Pause')
+                        #print('Pause')
                         yield "Pause_menu"
                     else:
                         break
-            print(self.alive_tanks)
+            #print(self.alive_tanks)
         return "Main_menu"
 
     def handle(self):
-        print("Game handles request.")
+        #print("Game handles request.")
         pygame.event.set_allowed([QUIT, KEYDOWN])
         if self.context.info == "New":
             self._loop = self.loop()
         else:
             graphics.show_current_state(self.context.game._screen)
-        self.stop_case = next(self._loop)
-        print(self.stop_case)
+        try:
+            self.stop_case = next(self._loop)
+        except StopIteration:
+            self.stop_case = "Main_menu"
+            graphics.win()
+        #print(self.stop_case)
         if self.stop_case == "Pause_menu":
             self.context.info = "Pause_menu"
             self.context.game = self
@@ -82,14 +86,14 @@ class Game(State):
             self.context.info = "Main_menu"
             self.context.game = None
             self.context.transition_to(Menu())
-        print("Game wants to change the state of the context to", self.stop_case)
+        #print("Game wants to change the state of the context to", self.stop_case)
 
 
 class Menu(State):
     def handle(self):
         pygame.key.set_repeat(0, 0)
         pygame.event.set_allowed([QUIT, KEYDOWN])
-        print(self.context.info == "Pause_menu", self.context.info)
+        #print(self.context.info == "Pause_menu", self.context.info)
         if self.context.info == "Main_menu":
             menucontext = Menu_context(
                 self.context, Main_menu_selected_new_game())
@@ -143,7 +147,7 @@ class Menu_base(ABC):
     def accept(self):
         self._go_to_game = False
         event = pygame.event.wait()
-        print("event")
+        #print("event")
         if event.type == QUIT:
             self.quit()
         elif event.type == KEYDOWN:
@@ -154,7 +158,7 @@ class Menu_base(ABC):
                 self.go_down()
             elif pressed_keys[pygame.K_RETURN]:
                 if self.enter():
-                    print("Return")
+                    #print("Return")
                     return
         self.menu_context.work()
 

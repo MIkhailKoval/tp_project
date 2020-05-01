@@ -19,7 +19,7 @@ class main_window():
         self.context.game = None
         
         while True:
-            print("----------REQUEST------------")
+            #print("----------REQUEST------------")
             self.context.request()
 
 

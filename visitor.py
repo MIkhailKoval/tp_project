@@ -37,7 +37,6 @@ class Fight_visitor(Visitor):
         graphics.show_force(player)
         graphics.show_angle(player.impl)
         graphics.show_type_of_weapon(player)
-        print('HERE')
         while True:
             event = pygame.event.wait()
             if event.type == QUIT:
@@ -51,39 +50,40 @@ class Fight_visitor(Visitor):
                 pressed_ctrl = bool(
                     pressed_mod_keys & control.boost_move)
                 if pressed_ctrl:
-                    print("Ctrl")
+                    pass
+                    #print("Ctrl")
                 if pressed_keys[pygame.K_ESCAPE]:
                     return "Menu"
                 if pressed_keys[control.neg_rotate]:
-                    print("RIGHT")
+                    #print("RIGHT")
                     player.rotate(
                         -1/180 - gs.CTRL_BOOSTING/180 * pressed_ctrl)
                 if pressed_keys[control.pos_rotate]:
-                    print("LEFT")
+                    #print("LEFT")
                     player.rotate(
                         +1/180 + gs.CTRL_BOOSTING/180 * pressed_ctrl)
                 if pressed_keys[control.boost_force]:
-                    print("UP")
+                    #print("UP")
                     player.change_force(1 + gs.CTRL_BOOSTING * pressed_ctrl)
                     graphics.show_force(player)
                 if pressed_keys[control.reduce_force]:
-                    print("DOWN")
+                    #print("DOWN")
                     player.change_force(-1 - gs.CTRL_BOOSTING * pressed_ctrl)
                     graphics.show_force(player)
                 if pressed_keys[control.choose_usual_bomb]:
-                    print("1")
+                    #print("1")
                     player.choose_weapon(weapon.usual_bomb)
                     graphics.show_type_of_weapon(player)
                 if pressed_keys[control.choose_bullet]:
-                    print("2")
+                    #print("2")
                     player.choose_weapon(weapon.bullet)
                     graphics.show_type_of_weapon(player)
                 if pressed_keys[control.choose_kiloton]:
-                    print("3")
+                    #print("3")
                     player.choose_weapon(weapon.kiloton)
                     graphics.show_type_of_weapon(player)
                 if pressed_keys[control.choose_atom_bomb]:
-                    print("4")
+                    #print("4")
                     player.choose_weapon(weapon.atom_bomb)
                     graphics.show_type_of_weapon(player)
                 '''if pressed_keys[control.choose_laser]:
@@ -91,7 +91,7 @@ class Fight_visitor(Visitor):
                     print("5", "no please")'''
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
-                    print("ENTER")
+                    #print("ENTER")
                     if player.shoot(game):
                         return "Shoot"
                     else:

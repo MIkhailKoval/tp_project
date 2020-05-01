@@ -34,6 +34,17 @@ def prt_scr():
             for x in range(gs.WIDTH)]
 
 
+def win():
+    window.fill(gs.background_colour)
+    _font = pygame.font.Font(None, 72)
+    text = _font.render('WIN!!!', 1, YELLOW )
+    place = text.get_rect(center=( gs.WIDTH / 2, gs.HEIGHT / 2))
+    window.blit(text, place)
+    pygame.display.update()
+    pygame.time.wait(2000)
+    #pygame.display.update()
+
+
 def show_current_state(matrix):
     for x in range(gs.WIDTH):
         for y in range(gs.HEIGHT):
@@ -43,7 +54,7 @@ def show_current_state(matrix):
 class Tank(tank.Tank):
     def __init__(self, game, number):
         self.x, self.y = game.map.get_coord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
-                                           (gs.number_of_fighters - 1) * number)
+                                            (gs.number_of_fighters - 1) * number)
         self.muzzle_coord = (self.x + TANK_RADIUS, self.y + MUZZLE_LENGTH)
         self.draw_muzzle(gs.background_colour)
         self.angle = math.pi / 2
@@ -98,7 +109,6 @@ class Tank(tank.Tank):
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
-                print(x, y)
                 if window.get_at(
                         (x, y)) not in [gs.background_colour, BLUE, BLACK]:
                     break
@@ -153,17 +163,19 @@ def show_force(player):
     window.blit(text, place)
     pygame.display.update()
 
+
 def show_type_of_weapon(player):
-    pygame.draw.rect(window, gs.relief_colour, (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40 ))
+    pygame.draw.rect(window, gs.relief_colour,
+                     (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40))
     if not hasattr(player, 'current_weapon'):
         return
     _font = pygame.font.Font(None, 18)
-    print(type(player.current_weapon))
     lst = str(type(player.current_weapon)).replace('_', '')
     text = _font.render('Weapon:{}'.format(lst[15:-2]), 1, RED)
     place = text.get_rect(center=(440, 375))
     window.blit(text, place)
     pygame.display.update()
+
 
 def show_angle(tank):
     pygame.draw.rect(window, gs.relief_colour,
@@ -171,7 +183,6 @@ def show_angle(tank):
     if not hasattr(tank, 'angle'):
         return
     _font = pygame.font.Font(None, 18)
-    print(tank.angle)
     angle = int(tank.angle / math.pi * 180)
     text = _font.render('Angle:{}'.format(str(angle)), 1, RED)
     place = text.get_rect(center=(550, 375))
