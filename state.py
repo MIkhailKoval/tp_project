@@ -71,7 +71,10 @@ class Game(State):
             self._loop = self.loop()
         else:
             graphics.show_current_state(self.context.game._screen)
-        self.stop_case = next(self._loop)
+        try:
+            self.stop_case = next(self._loop)
+        except StopIteration:
+            self.stop_case = "Main_menu"
         print(self.stop_case)
         if self.stop_case == "Pause_menu":
             self.context.info = "Pause_menu"

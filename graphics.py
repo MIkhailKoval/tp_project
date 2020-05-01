@@ -34,6 +34,10 @@ def prt_scr():
             for x in range(gs.WIDTH)]
 
 
+def win():
+    window.fill(gs.background_colour)
+
+
 def show_current_state(matrix):
     for x in range(gs.WIDTH):
         for y in range(gs.HEIGHT):
@@ -43,7 +47,7 @@ def show_current_state(matrix):
 class Tank(tank.Tank):
     def __init__(self, game, number):
         self.x, self.y = game.map.get_coord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
-                                           (gs.number_of_fighters - 1) * number)
+                                            (gs.number_of_fighters - 1) * number)
         self.muzzle_coord = (self.x + TANK_RADIUS, self.y + MUZZLE_LENGTH)
         self.draw_muzzle(gs.background_colour)
         self.angle = math.pi / 2
@@ -89,7 +93,7 @@ class Tank(tank.Tank):
 
     def shoot(self, game, weapon, force, colour=BLUE):
         game.map.update()
-        v = force / 5.5 * 2.5
+        v = force / 5.5 * 2
         (x, y, t) = (0, 0, 0)
         clock = pygame.time.Clock()
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
@@ -154,8 +158,10 @@ def show_force(player):
     window.blit(text, place)
     pygame.display.update()
 
+
 def show_type_of_weapon(player):
-    pygame.draw.rect(window, gs.relief_colour, (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40 ))
+    pygame.draw.rect(window, gs.relief_colour,
+                     (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40))
     if not hasattr(player, 'current_weapon'):
         return
     _font = pygame.font.Font(None, 18)
@@ -165,6 +171,7 @@ def show_type_of_weapon(player):
     place = text.get_rect(center=(440, 375))
     window.blit(text, place)
     pygame.display.update()
+
 
 def show_angle(tank):
     pygame.draw.rect(window, gs.relief_colour,

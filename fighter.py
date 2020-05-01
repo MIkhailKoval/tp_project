@@ -9,7 +9,7 @@ MIN_FORCE = 10
 class Fighter(ABC):
     weapons = {weapon.usual_bomb: 100, weapon.bullet: 9999,
                weapon.kiloton: 3, weapon.atom_bomb: 1, weapon.laser: 0}
-    current_weapon = weapon.Usual_bomb
+    current_weapon = weapon.usual_bomb
     score = int()
     health = 100
     force = 100
@@ -31,21 +31,20 @@ class Fighter(ABC):
         if self.weapons[self.current_weapon] > 0:
             self.weapons[self.current_weapon] -= 1
             distances = self.impl.shoot(game, self.current_weapon, self.force)
-            handle_explosion(game.fighters, distances,
-                             self.current_weapon.radius, self.current_weapon.damage, game.alive_tanks)
+            handle_explosion(game, distances,
+                             self.current_weapon.radius, self.current_weapon.damage)
             return True
         else:
             return False
 
-    def reduce_health(self, delta, fighters, alive_tanks):
+    def reduce_health(self, delta, game):
         if self.health > 0:
             self.health -= delta
             if self.health <= 0:
-                distances = self.impl.detonate(fighters)
-                print(alive_tanks)
-                alive_tanks -= 1
+                distances = self.impl.detonate(game.fighters)
+                game.alive_tanks -= 1
                 handle_explosion(
-                    fighters, distances, weapon.usual_bomb.radius, weapon.usual_bomb.damage, alive_tanks)
+                    game, distances, weapon.usual_bomb.radius, weapon.usual_bomb.damage)
 
     def is_alive(self):
         return self.health > 0
@@ -58,8 +57,7 @@ class Fighter(ABC):
         pass
 
 
-def handle_explosion(fighters, distances, radius, damage, alive_tanks):
+def handle_explosion(game, distances, radius, damage):
     for i in range(len(distances)):
-        print(i, radius, distances[i])
         if radius >= distances[i]:
-            fighters[i].reduce_health(damage, fighters, alive_tanks)
+            game.fighters[i].reduce_health(damage, game)
