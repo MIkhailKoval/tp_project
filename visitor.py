@@ -88,6 +88,7 @@ class fightVisitor(Visitor):
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
                     print("ENTER")
+                    graphics.updateTanks(game.fighters)
                     player.shoot(game)
                     return "Shoot"
 
