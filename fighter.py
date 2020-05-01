@@ -1,18 +1,18 @@
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-import fighterIterator
 import math
 import weapon
 
 MAX_FORCE = 200
 MIN_FORCE = 1
 
+
 class Fighter(ABC):
     weapons = {weapon.usualBomb: 100, weapon.bullet: 9999,
                weapon.kiloton: 3, weapon.atomBomb: 1, weapon.laser: 0}
     currentWeapon = weapon.usualBomb
     score = int()
-    health = 1000
+    health = 100
     force = 100
 
     def __init__(self, impl):
@@ -33,17 +33,18 @@ class Fighter(ABC):
     def chooseWeapon(self, newWeapon):
         self.currentWeapon = newWeapon
 
-    def shoot(self):
+    def shoot(self, game):
         if self.weapons[self.currentWeapon] > 0:
             self.weapons[self.currentWeapon] -= 1
-            distances = self.impl.shoot(self.currentWeapon, self.force)
-            #iter = fighterIterator.Fighters().__iter__()
-            #for x in iter:
-                #if i == len(healthes):
-                #    break
-                #x.health = healthes[i]
-                #i += 1
-                #print(x.health)
+            distances = self.impl.shoot(game, self.currentWeapon, self.force)
+            handle_explosion(game.fighters, distances,
+                             self.currentWeapon.radius)
+
+    def reduceHealth(self, delta, fighters):
+        self.health -= delta
+        if self.health <= 0:
+            distances = self.impl.detonate()
+            handle_explosion(fighters, distances, 30)
 
     def isAlive(self):
         return self.health > 0
@@ -58,3 +59,9 @@ class Fighter(ABC):
     @abstractmethod
     def accept(self, visitor):
         pass
+
+
+def handle_explosion(fighters, distances, radius):
+    for i in range(len(distances)):
+        if radius >= distances[i]:
+            fighters[i].reduceHealth(30)

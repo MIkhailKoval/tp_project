@@ -3,6 +3,7 @@ from gamesettings import maxHealth
 
 class Weapon:
     gravitation = True
+    radius = 0
 
 
 class UsualBomb(Weapon):

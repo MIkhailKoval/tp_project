@@ -13,12 +13,11 @@ class main_window():
         # pylint: disable=no-member
         graphics.init_window()
         self.objects = []
-        
-        
+
         self.context = Context(Menu())
         self.context.info = 'Main_menu'
         self.context.game = None
-        
+
         '''
         self.context = Context(Game())
         self.context.info = "New"
@@ -26,7 +25,6 @@ class main_window():
         while True:
             print("----------REQUEST------------")
             self.context.request()
-
 
 
 clock = pygame.time.Clock()

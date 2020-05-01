@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import weapon
 import math
 
+
 class Tank(ABC):
     angle = math.pi / 2
     force = float()
@@ -13,14 +14,6 @@ class Tank(ABC):
 
     @abstractmethod
     def set_angle(self, angle):
-        pass
-
-    @abstractmethod
-    def set_health(self, percent):
-        pass
-
-    @abstractmethod
-    def get_health(self) -> float:
         pass
 
     @abstractmethod

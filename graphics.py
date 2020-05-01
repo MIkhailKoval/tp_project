@@ -6,8 +6,6 @@ import random
 import tank
 import weapon
 window = None
-plan = None
-tanks = None
 
 # COLORS
 BLUE = (0, 0, 100, 255)
@@ -24,14 +22,8 @@ TANK_RADIUS = 10
 MUZZLE_LENGTH = 14
 
 
-def new_game():
-    global tanks
-    tanks = set()
-
-
 def init_window():
     global window
-    new_game()
     window = pygame.display.set_mode((gs.WIDTH, gs.HEIGHT))
     pygame.display.update()
 
@@ -48,15 +40,14 @@ def show_current_state(matrix):
 
 
 class Tank(tank.Tank):
-    def __init__(self, number):
-        self.x, self.y = plan.getCoord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
-                                       (gs.numberOfFighters - 1) * number)
+    def __init__(self, game, number):
+        self.x, self.y = game.map.getCoord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
+                                           (gs.numberOfFighters - 1) * number)
         self.muzzle_coord = (self.x + TANK_RADIUS, self.y + MUZZLE_LENGTH)
         self.colour = WHITE
         self.draw_muzzle(gs.backgroundColour)
         self.angle = math.pi / 2
         self.draw_tank()
-        print(len(tanks))
 
     def rotateMuzzle(self, angle):
         #print(self.angle, angle)
@@ -69,18 +60,13 @@ class Tank(tank.Tank):
         self.draw_muzzle()
 
     def draw_tank(self, tank_colour=WHITE):
-        #global tanks
-        if not self in tanks:
-            #if len(tanks) >= gs.numberOfFighters:
-            #tanks = set()
-            print('add')
-            tanks.add(self)
         x = -TANK_RADIUS * 10 - 1
         while x < TANK_RADIUS * 10:
             x += 1
             t = (self.x - x / 10,
                  -math.sqrt(TANK_RADIUS * TANK_RADIUS - (x)**2 / 100) + self.y)
-            pygame.draw.line(window, self.colour, t, (self.x - x / 10, self.y), 2)
+            pygame.draw.line(window, self.colour, t,
+                             (self.x - x / 10, self.y), 2)
         self.draw_muzzle()
 
     def get_angle(self):
@@ -91,12 +77,6 @@ class Tank(tank.Tank):
         self.rotateMuzzle(angle)
         self.draw_muzzle()
 
-    def set_health(self, delta):
-        self.health -= delta
-
-    def get_health(self):
-        return self.health
-
     def draw_muzzle(self, colour=BLACK):
         x = MUZZLE_LENGTH * math.cos(self.angle)
         self.muzzle_coord = (
@@ -106,8 +86,8 @@ class Tank(tank.Tank):
                          (self.x, self.y - 10 - 2), 3)
         pygame.display.update()
 
-    def shoot(self, weapon, force, colour=BLUE):
-        plan.update()
+    def shoot(self, game, weapon, force, colour=BLUE):
+        game.map.update()
         v = force
         (x, y, t) = (0, 0, 0)
         snaryad = 0
@@ -120,7 +100,7 @@ class Tank(tank.Tank):
             snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
                 if window.get_at(
-                    (x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
+                        (x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                     break
                 a.append((x, y))
                 for i in range(3):
@@ -131,22 +111,27 @@ class Tank(tank.Tank):
             t += 0.01
         pygame.display.update()
         distances = []
-        plan.update()
+        game.map.update()
         if x <= gs.WIDTH and x >= 0:
-            distances = explosion(x, y, weapon.radius)
+            distances = explosion(game.fighters, x, y, weapon.radius)
         pygame.display.update()
         return distances
 
+    def detonate(self, fighters):
+        explosion(fighters, self.x, self.y, 30, YELLOW)
 
-def explosion(x, y, r, color=RED):
+
+def explosion(fighters, x, y, r, color=RED):
     pygame.display.update()
     pygame.draw.circle(window, color, (int(x), int(y)), int(r))
     pygame.display.update()
     pygame.time.wait(400)
     pygame.draw.circle(window, LIGHT_BLUE, (int(x), int(y)), int(r))
     distances = []
-    for tank in tanks:
+    for fighter in fighters:
+        tank = fighter.impl
         distances.append((tank.x - x)**2 + (tank.y - y)**2)
+        '''
         if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
             old_health = tank.health
             tank.set_health(gs.maxHealth / 2)
@@ -154,16 +139,17 @@ def explosion(x, y, r, color=RED):
                 tank.draw_muzzle(BLUE)
                 explosion(tank.x, tank.y - MUZZLE_LENGTH,
                           TANK_RADIUS + MUZZLE_LENGTH, YELLOW)
-    updateTanks()
+        '''
+    updateTanks(fighters)
     pygame.display.update()
     return distances
 
 
-def updateTanks():
-    for tank in tanks:
-        print(tank.health)
-        if tank.health > 0:
-            tank.draw_tank()
+def updateTanks(fighters):
+    for fighter in fighters:
+        print(fighter.health)
+        if fighter.health > 0:
+            fighter.impl.draw_tank()
 
 
 class Info:
@@ -178,8 +164,6 @@ class Map:
         pygame.draw.rect(window, gs.backgroundColour,
                          (0, 0, gs.WIDTH, gs.HEIGHT))
         self.draw_relief()
-        global plan
-        plan = self
 
     def getCoord(self, x):
         return [
