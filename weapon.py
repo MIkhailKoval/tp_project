@@ -8,7 +8,7 @@ class Weapon:
 
 class UsualBomb(Weapon):
     radius = 30
-    damage = maxHealth
+    damage = int(maxHealth * 0.34)
 
 
 class Bullet(Weapon):

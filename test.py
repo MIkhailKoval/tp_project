@@ -23,7 +23,7 @@ class Test_weapon(unittest.TestCase):
         pygame.init()
         # pylint: disable=no-member
         graphics.init_window()
-        gs.numberOfFighters = 2
+        gs.number_of_fighters = 2
         self.objects = []
         game = state.Game()
         self.context = state.Context(game)
@@ -35,69 +35,33 @@ class Test_weapon(unittest.TestCase):
         pygame.quit()
         # pylint: disable=no-member
 
-    def test_1(self):
-        self.game.fighters[0].rotate(45)
+    def test_usual_bomb(self):
+        self.game.fighters[0].rotate(-45/180)
         self.game.fighters[0].change_force(100)
         self.game.fighters[0].shoot(self.game)
-        print('qwerty', self.game.fighters[1].health)
-        self.assertTrue(self.game.fighters[1].health == 70)
+        self.assertTrue(self.game.fighters[1].health == 66)
+
+    def test_bullet(self):
+        self.game.fighters[0].rotate(-45/180)
+        self.game.fighters[0].change_force(100)
+        self.game.fighters[0].choose_weapon(weapon.bullet)
+        self.game.fighters[0].shoot(self.game)
+        self.assertTrue(self.game.fighters[1].health == 100)
+
+    def test_kilotone(self):
+        self.game.fighters[0].rotate(-25/180)
+        self.game.fighters[0].change_force(100)
+        self.game.fighters[0].choose_weapon(weapon.kiloton)
+        self.game.fighters[0].shoot(self.game)
+        self.assertTrue(self.game.fighters[1].health == 100)
+
+    def test_atom_bomb(self):
+        self.game.fighters[0].rotate(-25/180)
+        self.game.fighters[0].change_force(100)
+        self.game.fighters[0].choose_weapon(weapon.atom_bomb)
+        self.game.fighters[0].shoot(self.game)
+        self.assertTrue(self.game.fighters[1].health <= 0)
 
 
-'''
-    def test_2(self):
-        pass
-
-    def test_3(self):
-        pass
-
-    def test_4(self):
-        pass
-
-    def test_5(self):
-        pass
-
-    def test_6(self):
-        pass
-
-    def test_7(self):
-        pass
-
-    def test_8(self):
-        pass
-
-    def test_9(self):
-        pass
-
-    def test_10(self):
-        pass
-
-    def test_11(self):
-        pass
-
-    def test_12(self):
-        pass
-
-    def test_13(self):
-        pass
-
-    def test_14(self):
-        pass
-
-    def test_15(self):
-        pass
-
-    def test_16(self):
-        pass
-
-    def test_17(self):
-        pass
-
-    def test_18(self):
-        pass
-
-    def test_19(self):
-        pass
-
-'''
 if __name__ == '__main__':
     unittest.main()
