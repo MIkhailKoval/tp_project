@@ -8,7 +8,8 @@ from pygame.constants import (
 import pygame
 import sys
 import weapon
-import graphics 
+import graphics
+
 
 class Visitor(ABC):
     @abstractmethod
@@ -52,42 +53,42 @@ class fightVisitor(Visitor):
                 if pressed_keys[pygame.K_ESCAPE]:
                     return "Menu"
                 if pressed_keys[control.negRotate]:
+                    print("RIGHT")
                     player.rotate(
                         -1/180 - 4/180 * pressedCtrl)
-                    print("RIGHT")
-                    #graphics.show_force(player)
+                    # graphics.show_force(player)
                 if pressed_keys[control.posRotate]:
+                    print("LEFT")
                     player.rotate(
                         +1/180 + 4/180 * pressedCtrl)
-                    print("LEFT")
-                    #graphics.show_force(player)
+                    # graphics.show_force(player)
                 if pressed_keys[control.boostForce]:
-                    player.changeForce(1 + 4 * pressedCtrl)
                     print("UP")
+                    player.changeForce(1 + 4 * pressedCtrl)
                     graphics.show_force(player)
                 if pressed_keys[control.reduceForce]:
-                    player.changeForce(-1 - 4 * pressedCtrl)
                     print("DOWN")
+                    player.changeForce(-1 - 4 * pressedCtrl)
                     graphics.show_force(player)
                 if pressed_keys[control.chooseUsualBomb]:
-                    player.chooseWeapon(weapon.usualBomb)
                     print("1")
+                    player.chooseWeapon(weapon.usualBomb)
                 if pressed_keys[control.chooseBullet]:
-                    player.chooseWeapon(weapon.bullet)
                     print("2")
+                    player.chooseWeapon(weapon.bullet)
                 if pressed_keys[control.chooseKiloton]:
-                    player.chooseWeapon(weapon.kiloton)
                     print("3")
+                    player.chooseWeapon(weapon.kiloton)
                 if pressed_keys[control.chooseAtomBomb]:
-                    player.chooseWeapon(weapon.atomBomb)
                     print("4")
+                    player.chooseWeapon(weapon.atomBomb)
                 if pressed_keys[control.chooseLaser]:
                     player.chooseWeapon(weapon.laser)
                     print("5", "no please")
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
-                    player.shoot(game)
                     print("ENTER")
+                    player.shoot(game)
                     return "Shoot"
 
     def moveBot(self):

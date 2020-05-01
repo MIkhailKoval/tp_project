@@ -38,13 +38,16 @@ class Fighter(ABC):
             self.weapons[self.currentWeapon] -= 1
             distances = self.impl.shoot(game, self.currentWeapon, self.force)
             handle_explosion(game.fighters, distances,
-                             self.currentWeapon.radius)
+                             self.currentWeapon.radius, self.currentWeapon.damage, game.alive_tanks)
 
-    def reduceHealth(self, delta, fighters):
-        self.health -= delta
-        if self.health <= 0:
-            distances = self.impl.detonate()
-            handle_explosion(fighters, distances, 30)
+    def reduceHealth(self, delta, fighters, alive_tanks):
+        if self.health > 0:
+            self.health -= delta
+            if self.health <= 0:
+                distances = self.impl.detonate(fighters)
+                alive_tanks -= 1
+                handle_explosion(
+                    fighters, distances, weapon.usualBomb.radius, weapon.usualBomb.damage, alive_tanks)
 
     def isAlive(self):
         return self.health > 0
@@ -61,7 +64,8 @@ class Fighter(ABC):
         pass
 
 
-def handle_explosion(fighters, distances, radius):
+def handle_explosion(fighters, distances, radius, damage, alive_tanks):
     for i in range(len(distances)):
+        print(i, radius, distances[i])
         if radius >= distances[i]:
-            fighters[i].reduceHealth(30)
+            fighters[i].reduceHealth(damage, fighters, alive_tanks)
