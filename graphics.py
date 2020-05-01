@@ -49,7 +49,6 @@ class Tank(tank.Tank):
         self.draw_tank()
 
     def rotateMuzzle(self, angle):
-        #print(self.angle, angle)
         self.draw_muzzle(gs.backgroundColour)
         self.angle += (angle)
         if self.angle > math.pi:
@@ -90,15 +89,13 @@ class Tank(tank.Tank):
 
     def shoot(self, game, weapon, force, colour=BLUE):
         game.map.update()
-        v = force
+        v = force / 5.5 * 2
         (x, y, t) = (0, 0, 0)
         snaryad = 0
-        a = []
         clock = pygame.time.Clock()
-        #v *= 5
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
-            x = v * math.cos(self.angle) * t / 5.5 
-            y = v * math.sin(self.angle) * t / 5.5  - t * t / 2
+            x = v * math.cos(self.angle) * t 
+            y = v * math.sin(self.angle) * t -  5 * t * t
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
             snaryad += 1
@@ -106,15 +103,10 @@ class Tank(tank.Tank):
                 if window.get_at(
                         (x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
                     break
-                a.append((x, y))
                 for i in range(3):
                     window.set_at((x + i, y), colour)
-                a.append((x, y))
-                # 
-                #clock.tick(60)
-                if snaryad % 7 == 0:
-                    pygame.display.update()
-            # ну нельзя же все числа заменить на константы!(Это просто время в нашей системе отсчета)
+                clock.tick(3500)
+                pygame.display.update()
             t += 0.01
         pygame.display.update()
         distances = []
@@ -138,15 +130,6 @@ def explosion(fighters, x, y, r, color=RED):
     for fighter in fighters:
         tank = fighter.impl
         distances.append((tank.x - x)**2 + (tank.y - y)**2)
-        '''
-        if (10 + r)**2 >= (tank.x - x)**2 + (tank.y - y)**2:
-            old_health = tank.health
-            tank.set_health(gs.maxHealth / 2)
-            if tank.health <= 0 and old_health > 0:
-                tank.draw_muzzle(BLUE)
-                explosion(tank.x, tank.y - MUZZLE_LENGTH,
-                          TANK_RADIUS + MUZZLE_LENGTH, YELLOW)
-    '''
     updateTanks(fighters)
     show_force(color)
     show_angle(color)
