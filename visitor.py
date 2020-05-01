@@ -22,7 +22,7 @@ class Visitor(ABC):
         pass
 
 
-class fightVisitor(Visitor):
+class Fight_visitor(Visitor):
     info = str()
 
     def __init__(self):
@@ -31,8 +31,8 @@ class fightVisitor(Visitor):
     def movePlayer(self, game, player: 'Player'):
         if not player.isAlive():
             return
-        pygame.key.set_repeat(200, 1000 // gs.FPS)
         # здесь надо, чтобы отсеялись лишние
+        pygame.key.set_repeat(200, 1000 // gs.FPS)
         player.impl.draw_tank(graphics.PINK)
         graphics.show_force(player)
         print('HERE')
@@ -55,41 +55,45 @@ class fightVisitor(Visitor):
                 if pressed_keys[control.negRotate]:
                     print("RIGHT")
                     player.rotate(
-                        -1/180 - 4/180 * pressedCtrl)
+                        -1/180 - gs.CTRL_BOOSTING/180 * pressedCtrl)
                     # graphics.show_force(player)
                 if pressed_keys[control.posRotate]:
                     print("LEFT")
                     player.rotate(
-                        +1/180 + 4/180 * pressedCtrl)
+                        +1/180 + gs.CTRL_BOOSTING/180 * pressedCtrl)
                     # graphics.show_force(player)
                 if pressed_keys[control.boostForce]:
                     print("UP")
-                    player.changeForce(1 + 4 * pressedCtrl)
+                    player.change_force(1 + gs.CTRL_BOOSTING * pressedCtrl)
                     graphics.show_force(player)
                 if pressed_keys[control.reduceForce]:
                     print("DOWN")
-                    player.changeForce(-1 - 4 * pressedCtrl)
+                    player.change_force(-1 - gs.CTRL_BOOSTING * pressedCtrl)
                     graphics.show_force(player)
                 if pressed_keys[control.chooseUsualBomb]:
                     print("1")
-                    player.chooseWeapon(weapon.usualBomb)
+                    player.choose_weapon(weapon.usualBomb)
                 if pressed_keys[control.chooseBullet]:
                     print("2")
-                    player.chooseWeapon(weapon.bullet)
+                    player.choose_weapon(weapon.bullet)
                 if pressed_keys[control.chooseKiloton]:
                     print("3")
-                    player.chooseWeapon(weapon.kiloton)
+                    player.choose_weapon(weapon.kiloton)
                 if pressed_keys[control.chooseAtomBomb]:
                     print("4")
-                    player.chooseWeapon(weapon.atomBomb)
+                    player.choose_weapon(weapon.atomBomb)
+                '''
                 if pressed_keys[control.chooseLaser]:
-                    player.chooseWeapon(weapon.laser)
+                    player.choose_weapon(weapon.laser)
                     print("5", "no please")
+                '''
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
                     print("ENTER")
-                    player.shoot(game)
-                    return "Shoot"
+                    if player.shoot(game):
+                        return "Shoot"
+                    else:
+                        pygame.key.set_repeat(200, 1000 // gs.FPS)
 
     def moveBot(self):
         pass

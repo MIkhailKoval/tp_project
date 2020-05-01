@@ -4,7 +4,7 @@ import math
 import weapon
 
 MAX_FORCE = 200
-MIN_FORCE = 1
+MIN_FORCE = 10
 
 
 class Fighter(ABC):
@@ -21,16 +21,11 @@ class Fighter(ABC):
     def rotate(self, angle: int):
         self.impl.set_angle(angle * math.pi)
 
-    def changeForce(self, delta):
-        if self.force + delta >= MAX_FORCE:
-            self.force = MAX_FORCE
-        elif self.force + delta <= MIN_FORCE:
-            self.force = MIN_FORCE
-        else:
-            self.force += delta
+    def change_force(self, delta):
+        self.force = max(MIN_FORCE, min(MAX_FORCE, self.force + delta))
         print('force ', self.force)
 
-    def chooseWeapon(self, newWeapon):
+    def choose_weapon(self, newWeapon):
         self.currentWeapon = newWeapon
 
     def shoot(self, game):
@@ -39,12 +34,16 @@ class Fighter(ABC):
             distances = self.impl.shoot(game, self.currentWeapon, self.force)
             handle_explosion(game.fighters, distances,
                              self.currentWeapon.radius, self.currentWeapon.damage, game.alive_tanks)
+            return True
+        else:
+            return False
 
     def reduceHealth(self, delta, fighters, alive_tanks):
         if self.health > 0:
             self.health -= delta
             if self.health <= 0:
                 distances = self.impl.detonate(fighters)
+                print(alive_tanks)
                 alive_tanks -= 1
                 handle_explosion(
                     fighters, distances, weapon.usualBomb.radius, weapon.usualBomb.damage, alive_tanks)
@@ -54,10 +53,6 @@ class Fighter(ABC):
 
     def get_force(self):
         return self.force
-
-    def change_force(self, delta):
-        self.force = (self.force + 200 + delta) % 200
-        print('force ', self.force)
 
     @abstractmethod
     def accept(self, visitor):

@@ -1,4 +1,4 @@
-numberOfFighters = 9
+numberOfFighters = 2
 maxWind = 0
 existsReflection = False
 backgroundColour = (0, 255, 255)
@@ -10,3 +10,4 @@ FOR_INFO = 100
 FPS = 60
 gunColour = (0, 0, 255)
 maxHealth = 1000
+CTRL_BOOSTING = 4

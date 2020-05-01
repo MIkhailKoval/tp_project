@@ -7,7 +7,7 @@ from pygame import (
 )
 import pygame
 import sys
-from visitor import fightVisitor, Player
+from visitor import Fight_visitor, Player
 
 
 class Context(ABC):
@@ -50,7 +50,7 @@ class Game(State):
             self.fighters.append(Player(graphics.Tank(self, i)))
         pygame.display.update()
 
-        self.visitor = fightVisitor()
+        self.visitor = Fight_visitor()
 
     def loop(self) -> str:
         while self.alive_tanks > 1:
@@ -62,7 +62,7 @@ class Game(State):
                         yield "Pause_menu"
                     else:
                         break
-            print('Win')
+            print(self.alive_tanks)
         return "Main_menu"
 
     def handle(self):
@@ -180,7 +180,7 @@ class Menu_base(ABC):
 
 
 class Main_menu(Menu_base):
-    options = ["New game", "Settings", "Quit"]
+    options = ["New game", "Settings (in the works)", "Quit"]
 
 
 class Main_menu_selected_new_game(Main_menu):
@@ -199,7 +199,7 @@ class Main_menu_selected_new_game(Main_menu):
 
 
 class Main_menu_selected_settings(Main_menu):
-    _selected = "Settings"
+    _selected = "Settings (in the works)"
 
     def enter(self):
         return False
