@@ -45,11 +45,10 @@ class Game(State):
     def __init__(self):
         self.map = graphics.Map()
         self.fighters = []
-        self.alive_tanks = gs.numberOfFighters
-        for i in range(gs.numberOfFighters):
+        self.alive_tanks = gs.number_of_fighters
+        for i in range(gs.number_of_fighters):
             self.fighters.append(Player(graphics.Tank(self, i)))
         pygame.display.update()
-
         self.visitor = Fight_visitor()
 
     def loop(self) -> str:
@@ -75,10 +74,9 @@ class Game(State):
         self.stop_case = next(self._loop)
         print(self.stop_case)
         if self.stop_case == "Pause_menu":
-            # print(self.context._screen)
             self.context.info = "Pause_menu"
             self.context.game = self
-            self.context.game._screen = graphics.PrtScr()
+            self.context.game._screen = graphics.prt_scr()
             self.context.transition_to(Menu())
         else:
             self.context.info = "Main_menu"

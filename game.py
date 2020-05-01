@@ -17,11 +17,7 @@ class main_window():
         self.context = Context(Menu())
         self.context.info = 'Main_menu'
         self.context.game = None
-
-        '''
-        self.context = Context(Game())
-        self.context.info = "New"
-        '''
+        
         while True:
             print("----------REQUEST------------")
             self.context.request()

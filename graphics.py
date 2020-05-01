@@ -17,7 +17,8 @@ PINK = (255, 100, 180)
 ORANGE = (255, 100, 10)
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
-# tank
+
+# TANKS
 TANK_RADIUS = 10
 MUZZLE_LENGTH = 14
 
@@ -28,7 +29,7 @@ def init_window():
     pygame.display.update()
 
 
-def PrtScr():
+def prt_scr():
     return [[window.get_at((x, y)) for y in range(gs.HEIGHT)]
             for x in range(gs.WIDTH)]
 
@@ -41,15 +42,15 @@ def show_current_state(matrix):
 
 class Tank(tank.Tank):
     def __init__(self, game, number):
-        self.x, self.y = game.map.getCoord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
-                                           (gs.numberOfFighters - 1) * number)
+        self.x, self.y = game.map.get_coord(0.1 * gs.WIDTH + 0.8 * gs.WIDTH /
+                                           (gs.number_of_fighters - 1) * number)
         self.muzzle_coord = (self.x + TANK_RADIUS, self.y + MUZZLE_LENGTH)
-        self.draw_muzzle(gs.backgroundColour)
+        self.draw_muzzle(gs.background_colour)
         self.angle = math.pi / 2
         self.draw_tank()
 
-    def rotateMuzzle(self, angle):
-        self.draw_muzzle(gs.backgroundColour)
+    def rotate_muzzle(self, angle):
+        self.draw_muzzle(gs.background_colour)
         self.angle += (angle)
         if self.angle > math.pi:
             self.angle = 0.0
@@ -72,8 +73,8 @@ class Tank(tank.Tank):
         return self.angle
 
     def set_angle(self, angle):
-        self.draw_muzzle(gs.backgroundColour)
-        self.rotateMuzzle(angle)
+        self.draw_muzzle(gs.background_colour)
+        self.rotate_muzzle(angle)
         show_angle(self)
         self.draw_muzzle()
 
@@ -88,9 +89,8 @@ class Tank(tank.Tank):
 
     def shoot(self, game, weapon, force, colour=BLUE):
         game.map.update()
-        v = force / 5.5 * 2
+        v = force / 5.5 * 2.5
         (x, y, t) = (0, 0, 0)
-        snaryad = 0
         clock = pygame.time.Clock()
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
             x = v * math.cos(self.angle) * t
@@ -98,10 +98,10 @@ class Tank(tank.Tank):
 
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
-            snaryad += 1
             if y > 0 and x > 0 and x < gs.WIDTH and y < gs.HEIGHT:
+                print(x, y)
                 if window.get_at(
-                        (x, y)) not in [gs.backgroundColour, BLUE, BLACK]:
+                        (x, y)) not in [gs.background_colour, BLUE, BLACK]:
                     break
                 for i in range(3):
                     window.set_at((x + i, y), colour)
@@ -130,40 +130,51 @@ def explosion(fighters, x, y, r, color=RED):
     for fighter in fighters:
         tank = fighter.impl
         distances.append(pow((tank.x - x)**2 + (tank.y - y)**2, 0.5))
-    updateTanks(fighters)
+    update_tanks(fighters)
     show_force(color)
-    show_angle(color)
+    show_angle(tank)
+    show_type_of_weapon(color)
     pygame.display.update()
     return distances
 
 
-def updateTanks(fighters):
+def update_tanks(fighters):
     for fighter in fighters:
         if fighter.health > 0:
             fighter.impl.draw_tank()
 
 
 def show_force(player):
-    pygame.draw.rect(window, gs.reliefColour, (500, 340, gs.WIDTH, 20))
+    pygame.draw.rect(window, gs.relief_colour, (gs.WIDTH - 100, 340, 100, 20))
     if not hasattr(player, 'force'):
         return
     _font = pygame.font.Font(None, 18)
-    print(player.force)
-    text = _font.render('Force:{}'.format(str(player.force)), 1, (100, 0, 0))
+    text = _font.render('Force:{}'.format(str(player.force)), 1, RED)
     place = text.get_rect(center=(550, 350))
     window.blit(text, place)
     pygame.display.update()
 
+def show_type_of_weapon(player):
+    pygame.draw.rect(window, gs.relief_colour, (gs.WIDTH - 220, gs.HEIGHT - 40, 120, 40 ))
+    if not hasattr(player, 'current_weapon'):
+        return
+    _font = pygame.font.Font(None, 18)
+    print(type(player.current_weapon))
+    lst = str(type(player.current_weapon)).replace('_', '')
+    text = _font.render('Weapon:{}'.format(lst[15:-2]), 1, RED)
+    place = text.get_rect(center=(440, 375))
+    window.blit(text, place)
+    pygame.display.update()
 
 def show_angle(tank):
-    pygame.draw.rect(window, gs.reliefColour,
+    pygame.draw.rect(window, gs.relief_colour,
                      (500, 360, gs.WIDTH - 500, gs.HEIGHT - 360))
     if not hasattr(tank, 'angle'):
         return
     _font = pygame.font.Font(None, 18)
     print(tank.angle)
     angle = int(tank.angle / math.pi * 180)
-    text = _font.render('Angle:{}'.format(str(angle)), 1, (100, 0, 0))
+    text = _font.render('Angle:{}'.format(str(angle)), 1, RED)
     place = text.get_rect(center=(550, 375))
     window.blit(text, place)
     pygame.display.update()
@@ -171,26 +182,26 @@ def show_angle(tank):
 
 class Map:
     def __init__(self):
-        self.reflection = random.randint(0, gs.existsReflection)
-        self.wind = random.randint(0, gs.maxWind)
-        pygame.draw.rect(window, gs.backgroundColour,
+        self.reflection = random.randint(0, gs.exists_reflection)
+        self.wind = random.randint(0, gs.max_wind)
+        pygame.draw.rect(window, gs.background_colour,
                          (0, 0, gs.WIDTH, gs.HEIGHT))
         self.draw_relief()
 
-    def getCoord(self, x):
+    def get_coord(self, x):
         return [
             x,
             x * (x - 100) * (x - gs.WIDTH) * (x - gs.HEIGHT) / 20000000 + 210
         ]
 
     def draw_relief(self):
-        points = [self.getCoord(x) for x in range(gs.WIDTH)]
+        points = [self.get_coord(x) for x in range(gs.WIDTH)]
         for (x, y_min) in points:
             for y in range(int(y_min), gs.HEIGHT):
-                window.set_at((x, y), gs.reliefColour)
+                window.set_at((x, y), gs.relief_colour)
 
     def update(self):
         for x in range(gs.WIDTH):
             for y in range(gs.HEIGHT):
                 if window.get_at((x, y)) == BLUE:
-                    window.set_at((x, y), gs.backgroundColour)
+                    window.set_at((x, y), gs.background_colour)
