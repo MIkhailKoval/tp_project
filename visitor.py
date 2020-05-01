@@ -16,8 +16,8 @@ class Visitor(ABC):
         pass
 
     @abstractmethod
-    def moveBot(self):  
-    # у функции планируется другая сигнатура (как у movePlayer)
+    def moveBot(self):
+        # у функции планируется другая сигнатура (как у movePlayer)
         pass
 
 
@@ -27,7 +27,9 @@ class fightVisitor(Visitor):
     def __init__(self):
         pass
 
-    def movePlayer(self, player: 'Player'):
+    def movePlayer(self, game, player: 'Player'):
+        if not player.isAlive():
+            return
         pygame.key.set_repeat(200, 1000 // gs.FPS)
         # здесь надо, чтобы отсеялись лишние
         player.impl.draw_tank(graphics.PINK)
@@ -84,7 +86,7 @@ class fightVisitor(Visitor):
                     print("5", "no please")
                 if pressed_keys[control.shoot]:
                     pygame.key.set_repeat(0, 0)
-                    player.shoot()
+                    player.shoot(game)
                     print("ENTER")
                     return "Shoot"
 
@@ -93,5 +95,5 @@ class fightVisitor(Visitor):
 
 
 class Player(Fighter):
-    def accept(self, visitor: 'Visitor'):
-        return visitor.movePlayer(self)
+    def accept(self, game, visitor: 'Visitor'):
+        return visitor.movePlayer(game, self)

@@ -1,8 +1,7 @@
 from menu_graphics import menu_graphics
 from abc import ABC, abstractmethod
-import fighterIterator
 import gamesettings as gs
-from graphics import Tank, Map, PrtScr
+import graphics
 from pygame import (
     QUIT, KEYDOWN
 )
@@ -42,45 +41,40 @@ class State(ABC):
         pass
 
 
-class Cycle:
+class Game(State):
     def __init__(self):
-        self.map = Map()
-        self.fighters = fighterIterator.Fighters()
+        self.map = graphics.Map()
+        self.fighters = []
+        self.alive_tanks = gs.numberOfFighters
         for i in range(gs.numberOfFighters):
-            self.fighters.add(Player(Tank(i)))
+            self.fighters.append(Player(graphics.Tank(self, i)))
         pygame.display.update()
 
-        self.fighter = self.fighters.__iter__()
         self.visitor = fightVisitor()
 
     def loop(self) -> str:
-        for currentFighter in self.fighter:
-            while True:
-                info = currentFighter.accept(self.visitor)
-                if info == "Menu":
-                    print('Pause')
-                    yield "Pause_menu"
-                else:
-                    break
-        print('Win')
+        while self.alive_tanks > 1:
+            for current_fighter in self.fighters:
+                while True:
+                    info = current_fighter.accept(self, self.visitor)
+                    if info == "Menu":
+                        print('Pause')
+                        yield "Pause_menu"
+                    else:
+                        break
+            print('Win')
         return "Main_menu"
 
-
-class Game(State):
     def handle(self):
         print("Game handles request.")
         pygame.event.set_allowed([QUIT, KEYDOWN])
         if self.context.info == "New":
-            self._cycle = Cycle()
-            self._cycle_gen = self._cycle.loop()
-        elif self.context.info == "Continue":
-            self._cycle = Cycle()
-            self._cycle_gen = self._cycle.loop()
-        menu = next(self._cycle_gen)
-        print("Pause_menu")
-        if menu == "Pause_menu":
-            self.context._screen = PrtScr()
-            #print(self.context._screen)
+            self._loop = self.loop()
+        self.stop_case = next(self._loop)
+        print(self.stop_case)
+        if self.stop_case == "Pause_menu":
+            self.context._screen = graphics.PrtScr()
+            # print(self.context._screen)
             self.context.info = "Pause_menu"
             self.context.game = self
             self.context.transition_to(Menu())
@@ -88,7 +82,7 @@ class Game(State):
             self.context.info = "Main_menu"
             self.context.game = None
             self.context.transition_to(Menu())
-        print("Game wants to change the state of the context.")
+        print("Game wants to change the state of the context to", self.stop_case)
 
 
 class Menu(State):
