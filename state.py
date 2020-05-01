@@ -254,7 +254,7 @@ class Pause_menu_selected_main_menu(Pause_menu):
         self.menu_context.reselect(Pause_menu_selected_return())
 
     def go_down(self):
-        self.menu_context.reselect(Pause_menu_selected_quit)
+        self.menu_context.reselect(Pause_menu_selected_quit())
 
 
 class Pause_menu_selected_quit(Pause_menu):
@@ -265,7 +265,7 @@ class Pause_menu_selected_quit(Pause_menu):
         return True
 
     def go_up(self):
-        self.menu_context.reselect(Pause_menu_selected_main_menu)
+        self.menu_context.reselect(Pause_menu_selected_main_menu())
 
     def go_down(self):
         pass

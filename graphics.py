@@ -95,9 +95,10 @@ class Tank(tank.Tank):
         snaryad = 0
         a = []
         clock = pygame.time.Clock()
+        v *= 5
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
-            x = v * math.cos(self.angle) * t / 5.5
-            y = v * math.sin(self.angle) * t / 5.5 - t * t / 2
+            x = v * math.cos(self.angle) * t / 5.5 / 5
+            y = v * math.sin(self.angle) * t / 5.5 /5 - t * t / 2
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
             snaryad += 1
