@@ -120,6 +120,7 @@ class Tank(tank.Tank):
         pygame.display.update()
         distances = []
         game.map.update()
+        update_tanks(game.fighters)
         if x <= gs.WIDTH and x >= 0:
             distances = explosion(game.fighters, x, y, weapon.radius)
         pygame.display.update()
