@@ -11,7 +11,9 @@ import visitor
 import weapon
 
 DELTA = 0.0000001
-bool isEqual(a, b):
+
+
+def isEqual(a, b):
     return abs(a - b) < DELTA
 
 
@@ -23,18 +25,25 @@ class Test_weapon(unittest.TestCase):
         graphics.init_window()
         gs.numberOfFighters = 2
         self.objects = []
-        self.context = state.Context(state.Game())
-        self.map = graphics.Map()
-        self.fighters = []
-        self.alive_tanks = gs.numberOfFighters
-        for i in range(gs.numberOfFighters):
-            self.fighters.append(visitor.Player(graphics.Tank(self, i)))
+        game = state.Game()
+        self.context = state.Context(game)
+        self.game = game
         pygame.display.update()
-        self.fighters.rotate(-45)
+
+    def tearDown(self):
+        # pylint: disable=no-member
+        pygame.quit()
+        # pylint: disable=no-member
 
     def test_1(self):
-        pass
+        self.game.fighters[0].rotate(45)
+        self.game.fighters[0].change_force(100)
+        self.game.fighters[0].shoot(self.game)
+        print('qwerty', self.game.fighters[1].health)
+        self.assertTrue(self.game.fighters[1].health == 70)
 
+
+'''
     def test_2(self):
         pass
 
@@ -89,6 +98,6 @@ class Test_weapon(unittest.TestCase):
     def test_19(self):
         pass
 
-
+'''
 if __name__ == '__main__':
     unittest.main()

@@ -79,11 +79,11 @@ class Tank(tank.Tank):
 
     def draw_muzzle(self, colour=BLACK):
         x = MUZZLE_LENGTH * math.cos(self.angle)
+        y = -MUZZLE_LENGTH * math.sin(self.angle)
         self.muzzle_coord = (
-            self.x + x,
-            -math.sqrt(MUZZLE_LENGTH * MUZZLE_LENGTH - (x)**2) + self.y - 10)
+            self.x + x, self.y - TANK_RADIUS + y)
         pygame.draw.line(window, colour, self.muzzle_coord,
-                         (self.x, self.y - MUZZLE_LENGTH), 3)
+                         (self.x, self.y - TANK_RADIUS), 3)
         pygame.display.update()
 
     def shoot(self, game, weapon, force, colour=BLUE):
@@ -93,8 +93,8 @@ class Tank(tank.Tank):
         snaryad = 0
         clock = pygame.time.Clock()
         while abs(x) <= gs.WIDTH and abs(y) <= gs.HEIGHT:
-            x = v * math.cos(self.angle) * t 
-            y = v * math.sin(self.angle) * t -  5 * t * t
+            x = v * math.cos(self.angle) * t
+            y = v * math.sin(self.angle) * t - 5 * t * t
 
             y = int(self.muzzle_coord[1] - y)
             x = int(self.muzzle_coord[0] + x)
