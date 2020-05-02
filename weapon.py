@@ -2,8 +2,8 @@ from gamesettings import max_health
 
 
 class Weapon:
-    gravitation = True
-    radius = 0
+    radius = int()
+    damage = int()
 
 
 class Usual_bomb(Weapon):
@@ -19,7 +19,6 @@ class Bullet(Weapon):
 class Kiloton(Weapon):
     radius = 70
     damage = 0.7 * max_health
-
 
 
 class Atom_bomb(Weapon):

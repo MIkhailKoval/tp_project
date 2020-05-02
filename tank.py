@@ -17,5 +17,5 @@ class Tank(ABC):
         pass
 
     @abstractmethod
-    def shoot(self, weapon, force):
+    def shoot(self, game, weapon, force):
         pass

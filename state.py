@@ -57,11 +57,11 @@ class Game(State):
                 while True:
                     info = current_fighter.accept(self, self.visitor)
                     if info == "Menu":
-                        #print('Pause')
+                        # print('Pause')
                         yield "Pause_menu"
                     else:
                         break
-            #print(self.alive_tanks)
+            # print(self.alive_tanks)
         return "Main_menu"
 
     def handle(self):
@@ -76,7 +76,7 @@ class Game(State):
         except StopIteration:
             self.stop_case = "Main_menu"
             graphics.win()
-        #print(self.stop_case)
+        # print(self.stop_case)
         if self.stop_case == "Pause_menu":
             self.context.info = "Pause_menu"
             self.context.game = self
@@ -147,7 +147,7 @@ class Menu_base(ABC):
     def accept(self):
         self._go_to_game = False
         event = pygame.event.wait()
-        #print("event")
+        # print("event")
         if event.type == QUIT:
             self.quit()
         elif event.type == KEYDOWN:
@@ -158,7 +158,7 @@ class Menu_base(ABC):
                 self.go_down()
             elif pressed_keys[pygame.K_RETURN]:
                 if self.enter():
-                    #print("Return")
+                    # print("Return")
                     return
         self.menu_context.work()
 
